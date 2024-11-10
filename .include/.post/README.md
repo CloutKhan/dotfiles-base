@@ -4,11 +4,11 @@ Config files that can be sourced, included, or called as hooks, _**at the end of
 ### Non-OS dependent
 ```ini
 [user]
-	email = <???>
-	name = <???>
+    email = <???>
+    name = <???>
     signingkey = <???>
 
 [commit]
-	gpgsign = true
-	signingkey = <???>
+    gpgsign = true
+    signingkey = <???>
 ```

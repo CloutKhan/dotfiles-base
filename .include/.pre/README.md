@@ -4,13 +4,13 @@ Config files that can be sourced, included, or called as hooks, _**at the end of
 ### Ubuntu
 ```ini
 [core]
-	autocrlf = input # Checkout as-is, commit Unix-style
+    autocrlf = input # Checkout as-is, commit Unix-style
     editor = vim
     filemode = true
     symlinks = true
 
 [gpg]
-	program = /usr/bin/gpg
+    program = /usr/bin/gpg
 ```
 ### Windows
 ```ini
@@ -21,16 +21,16 @@ Config files that can be sourced, included, or called as hooks, _**at the end of
     symlinks = false
 
 [gpg]
-	program = <???>
+    program = <???>
 ```
 ### MacOS
 ```ini
 [core]
-	autocrlf = input # Checkout as-is, commit Unix-style
+    autocrlf = input # Checkout as-is, commit Unix-style
     editor = vim
     filemode = true
     symlinks = true
 
 [gpg]
-	program = /opt/homebrew/bin/gpg
+    program = /opt/homebrew/bin/gpg
 ```
