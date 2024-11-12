@@ -8,6 +8,10 @@ case $- in
       *) return;;
 esac
 
+source-existing-file() { if [ -f "$1" ]; then source "$1"; fi; }
+
+source-existing-file ~/.include/.pre/.bashrc
+
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
@@ -144,3 +148,5 @@ export NVM_DIR="$HOME/.nvm"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+
+source-existing-file ~/.include/.post/.bashrc
