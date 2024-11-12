@@ -15,6 +15,9 @@ source-existing-file ~/.include/.pre/.bashrc
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
+HISTIGNORE="*PASSWORD*:*TOKEN*:*API_KEY*:*AWS_ACCESS_KEY_ID*:*AWS_SECRET_ACCESS_KEY*"
+# TODO? https://unix.stackexchange.com/questions/210297/how-to-exclude-command-from-history-list-but-to-keep-it-in-live-history
+# export HISTORY_IGNORE="(*PASSWORD*|*TOKEN*|*API_KEY*|*AWS_ACCESS_KEY_ID*|*AWS_SECRET_ACCESS_KEY*)"
 
 # append to the history file, don't overwrite it
 shopt -s histappend
