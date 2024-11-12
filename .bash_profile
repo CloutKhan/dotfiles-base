@@ -5,8 +5,20 @@
 # To prevent some installation writing to and creating any of these files and
 # obfuscating an unintended profile change, keep this file, the first profile
 # file checked for, and source the other two profile files here, plus the rc.
+# https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html
 ################################################################################
 
-if [ -f ~/.bash_login ]; then . ~/.bash_login; fi
-if [ -f ~/.profile ]; then . ~/.profile; fi
-if [ -f ~/.bashrc ]; then . ~/.bashrc; fi
+source-existing-file() { if [ -f "$1" ]; then source "$1"; fi; }
+
+# Pre-hook
+source-existing-file ~/.include/.pre/.bash_profile
+
+# Profiles
+source-existing-file ~/.bash_login
+source-existing-file ~/.profile
+
+# rc
+source-existing-file ~/.bashrc
+
+# Post-hook
+source-existing-file ~/.include/.post/.bash_profile
