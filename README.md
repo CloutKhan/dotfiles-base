@@ -1,11 +1,12 @@
 # [dotfiles](https://github.com/Skenvy/dotfiles)
-Proctor your user settings `~/.*` | `$HOME` with
+> [!TIP]
+> Proctor your user settings `~/.*` | `$HOME` with
 [dotfiles](https://en.wikipedia.org/wiki/Hidden_file_and_hidden_directory) --
-[[topic](https://github.com/topics/dotfiles)]
-[[io](https://dotfiles.github.io/)]
-[+[codespaces](https://docs.github.com/en/codespaces/setting-your-user-preferences/personalizing-github-codespaces-for-your-account#dotfiles)]
-[+[devcontainers](https://containers.dev/)]
-[++["awesome"](https://github.com/webpro/awesome-dotfiles)]
+[topic](https://github.com/topics/dotfiles),
+[io](https://dotfiles.github.io/),
+[codespaces](https://docs.github.com/en/codespaces/setting-your-user-preferences/personalizing-github-codespaces-for-your-account#dotfiles),
+[devcontainers](https://containers.dev/),
+["awesome"](https://github.com/webpro/awesome-dotfiles)
 ## Prelim
 This follows the flat splat pattern of just saying "`$HOME` is a repo".
 
@@ -56,9 +57,14 @@ Now with a `.gitmodules` file that places **this repository** in the `dotfiles` 
 With the submodule initialised and updated we can now symlink its contents into `$HOME`.
 > [!CAUTION]
 > This will **force** symlinks (`ln -sf realpath sympath`) to write over files that match the names of files in this repository
-```bash
-find ~/dotfiles -type f ! -name '.git' ! -name '.gitignore' ! -name '.gitmodules' -exec bash -c 'dotpath=$(echo "${0:$(($(pwd | wc -c)+$(echo "dotfiles" | wc -c)))}") && mkdir -p $(dirname $dotpath) && ln -sf ~/dotfiles/$dotpath ~/$dotpath' '{}' \;
-```
+> ```bash
+> find ~/dotfiles -type f ! -name '.git' ! -name '.gitignore' ! -name '.gitmodules' \
+> -exec bash -c 'dotpath=$(echo "${0:$(($(pwd | wc -c)+$(echo "dotfiles" | wc -c)))}") \
+> && mkdir -p $(dirname $dotpath) && ln -sf ~/dotfiles/$dotpath ~/$dotpath' '{}' \;
+> ```
+
+> [!WARNING]
+> If you want to maintain a `README.md` that will display on the github page of the repository that submodules this, because this process will clobber the including repository's root `README.md` with a symlink to **this** repository's `README.md`, you can get around this by placing your `README.md` you want displayed at `.github/README.md`, which is the first path for a `README.md` file that github will look for (even before a root `README.md`).
 
 ## License
 > [!NOTE]
