@@ -137,7 +137,8 @@ ssh-add-unloaded-key() {
      ssh-add -L | grep "$(cat ~/.ssh/$1.pub)" > /dev/null || ssh-add ~/.ssh/$1
 }
 
-ssh-add-unloaded-key "GH_Skenvy"
+# Add a line like the below to your ~/.include/.post/.bashrc
+# ssh-add-unloaded-key "my_primary_key"
 
 export GPG_TTY=$(tty)
 
