@@ -129,7 +129,11 @@ if [ -z "$SSH_AUTH_SOCK" ] ; then
     eval `ssh-agent -s` > /dev/null
 fi
 
-ssh-add -L | grep "$(cat ~/.ssh/GH_Skenvy.pub)" > /dev/null || ssh-add ~/.ssh/GH_Skenvy
+ssh-add-unloaded-key() {
+     ssh-add -L | grep "$(cat ~/.ssh/$1.pub)" > /dev/null || ssh-add ~/.ssh/$1
+}
+
+ssh-add-unloaded-key "GH_Skenvy"
 
 export GPG_TTY=$(tty)
 
