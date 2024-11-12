@@ -43,9 +43,9 @@ To use these configs as an extensible base, where you can track this repository 
 Of course, this goes against the intentional lack of symlinks in **this** flat splat of the "`$HOME` is a repo" design, but I'm ok with that. You might say that forking this, and tracking **this** as an upstream would be simpler, but that lacks that immediacy of seperation between "what am I editting in 'my changes on top of this'?" and "am I editting something that I'll need to move back upstream?" -- whereas working with a module lets me see the small changeset of hooks for what they are, and immediately know from a `git status` if I need to relocate config changes.
 
 Anyway, here's how you would submodule this into another repository and symlink it into `$HOME`.
-1. Adding submodules can be troublesome if you are already using the `.gitignore` that is just `*`, so temporarily `rm .gitignore`
+1. If you use a `.gitignore` that is just `*`, this can conflict with adding a submodule, so temporarily `rm .gitignore`
 1. Now you can track this as a submodule `git submodule add git@github.com:Skenvy/dotfiles.git`
-1. This should have automatically added the submodule folder and `.gitmodules`, so quickly `git restore .gitignore` and commit the addition of the module.
+1. The submodule and `.gitmodules` are staged, so `git restore .gitignore` and commit.
 1. `git submodule init && git submodule update`
 
 Now with a `.gitmodules` file that places **this repository** in the `dotfiles` folder in the repo that has added this;
@@ -56,7 +56,7 @@ Now with a `.gitmodules` file that places **this repository** in the `dotfiles` 
 ```
 With the submodule initialised and updated we can now symlink its contents into `$HOME`.
 > [!CAUTION]
-> This will **force** symlinks (`ln -sf realpath sympath`) to write over files that match the names of files in this repository
+> This will **force** symlinks (`ln -sf`) to write over files that match the names of files in this repository
 > ```bash
 > find ~/dotfiles -type f ! -name '.git' ! -name '.gitignore' ! -name '.gitmodules' \
 > -exec bash -c 'dotpath=$(echo "${0:$(($(pwd | wc -c)+$(echo "dotfiles" | wc -c)))}") \
