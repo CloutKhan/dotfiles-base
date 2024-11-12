@@ -2,6 +2,8 @@ source-existing-file ~/.include/.post/.bash_aliases
 
 alias gg="ls -liath"
 alias yellow_brick_road="echo \$PATH | tr ':' '\n'"
+alias gsh="perl -nE 'BEGIN {print \"git (CTRL+D to quit)> \"} system \"git \$_\"; print \"git (CTRL+D to quit)> \"'"
+# alias start_iterm_from_here="pwd > ~/.iterm2/initdir"
 
 # Git
 alias yikes="git log --pretty=format:\"%T | %H | %P\""
