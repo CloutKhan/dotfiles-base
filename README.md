@@ -23,17 +23,23 @@ To use any approach, you'll need to have `git` installed, as well as `ssh`, and 
 > [!TIP]
 > See both [`~/.include/.pre/README.md`](https://github.com/Skenvy/dotfiles/blob/main/.include/.pre/README.md) and [`~/.include/.post/README.md`](https://github.com/Skenvy/dotfiles/blob/main/.include/.post/README.md) for the two most commonly parsed folders, that provide suggestions on what config files to add in either place. For an illustrative example of this, have a look at [how to add your ssh key setup to `.bashrc`](https://github.com/Skenvy/dotfiles/blob/main/.include/.post/README.md#bashrc-example).
 ## Use as "`$HOME` is _this_ repo"
-If you're planning to accept this repo into your `$HOME`, you're doing so aware that these steps will <span style="color:red">destructively</span> replace files of the same name that exist in your `$HOME` already.
+If you're planning to accept this repo into your `$HOME`, you're doing so aware that these steps will destructively replace files of the same name that exist in your `$HOME` already.
+
 You would typically be interested in following this step as one of the first things you do setting up a new machine, so the destructivity would be limited to only replacing the user files that the system had generated for you. If you're following this step at some other point well after you've been using your machine for a while, chances are that customisations and personal settings might have crept in to your local dotfiles.
-* If `~` is _NOT_ empty, and you want to use _only_ `git`, and you want to use ssh:
-```sh
-cd ~ && git init && git remote add origin git@github.com:Skenvy/dotfiles.git && git fetch && git remote set-head origin -a && HEADSHA=$(git rev-parse origin/HEAD) && git remote set-head origin -d && REMOTE_HEAD=$(git name-rev $HEADSHA --name-only) && git checkout -b main $REMOTE_HEAD -f
-```
-* If `~` is _NOT_ empty, you want to use ssh, and force the cutover to these settings:
-```sh
-rm -rf .git/ && cd ~ && git init && git remote add origin git@github.com:Skenvy/dotfiles.git && git fetch && cp -r .git/refs/remotes/origin/* .git/refs/heads/ && git remote set-head origin -a && REMOTE_HEAD=$(git name-rev origin/HEAD --name-only) && rm .git/refs/heads/* && git checkout -b $REMOTE_HEAD origin/$REMOTE_HEAD -f
-```
-## Use this as a base with your own `.include`'s
+
+If that is the case, you should try your best to extract whatever `diff` there is between your existing config and what's in here, and keep it under `~/.include/`. Alternatively, you could back up your existing config just in case, as an optional step listed in the below.
+### Steps
+More than likely, `~` won't be empty, so `git` will refuse to clone into it.
+1. If you have pre-existing checkout here, remove it; `rm -rf .git/`
+1. Be in your home directory; `cd` works differently across `bash`, `pwsh`, and `cmd`
+1. Make `~` the repo, add the remote, and set the head. ONLY `bash` or `cmd`, NOT `pwsh`.
+> [!CAUTION]
+> **Destructively** overwrite the files of the same name as those checked in.
+> ```bash
+> git init && git remote add origin git@github.com:Skenvy/dotfiles.git && git fetch && git checkout -b main remotes/origin/main -f
+> ```
+## Use as "`$HOME` is _another_ repo"
+#### Use this as a base with your own `.include`'s.
 To use these configs as an extensible base, where you can track this repository and use its contents, you should add this repository as a submodule in your own dotfiles repository, and symlink its contents into `$HOME`. This lets you use and stay up-to-date with changes to **this**, but also allows you to commit any additional files you need, provided they wont just get symlinked over by following this process.
 
 > [!IMPORTANT]
