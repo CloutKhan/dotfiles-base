@@ -3,6 +3,8 @@ source-existing-file ~/.include/.post/.bash_aliases
 alias gg="ls -liath"
 alias yellow_brick_road="echo \$PATH | tr ':' '\n'"
 alias gsh="perl -nE 'BEGIN {print \"git (CTRL+D to quit)> \"} system \"git \$_\"; print \"git (CTRL+D to quit)> \"'"
+alias rehome="git submodule update --remote && git add dotfiles && CLOBBER_HOME=GRACEFULLY ~/bin/dotfiles-submodule-symlinks && git diff --cached dotfiles && git status"
+alias rehome_undo="git restore --staged dotfiles && git restore dotfiles && git submodule update && CLOBBER_HOME=GRACEFULLY ~/bin/dotfiles-submodule-symlinks && git status"
 # alias start_iterm_from_here="pwd > ~/.iterm2/initdir"
 
 # Git
@@ -12,6 +14,8 @@ alias honk="git diff \$(git merge-base \$(git rev-parse --abbrev-ref origin/HEAD
 alias cook_mcangus="CURR_BRANCH=\$(git branch -a | grep \* | cut -d ' ' -f2) && echo \"\\\$CURR_BRANCH = \$CURR_BRANCH\""
 alias eat_mcangus="git checkout \$CURR_BRANCH"
 alias unhook="git config --unset core.hookspath"
+alias gvconf="git config --list --show-origin --show-scope"
+alias tracking="git ls-tree --full-tree --name-only -r HEAD"
 
 # Docker
 alias yeet="docker run --rm -it ubuntu"
