@@ -7,40 +7,22 @@
 [codespaces](https://docs.github.com/en/codespaces/setting-your-user-preferences/personalizing-github-codespaces-for-your-account#dotfiles),
 [devcontainers](https://containers.dev/),
 ["awesome"](https://github.com/webpro/awesome-dotfiles)
-## Prelim
-This follows the flat splat pattern of just saying "`$HOME` is a repo".
 
-Rather than cloning into something like `~/dotfiles` and using some `install.sh` script or `stow`, this adopts the pattern that `$HOME` _is_ this repository. The magic, is a `.gitignore` of just `*`, coupled with the intentionality of `git add -f`'ing the files that I want tracked here. Using a subfolder and moving config into it and symlinking that back out to home wouldn't reduce the amount of clutter in `$HOME`, and it doesn't prevent changes from affecting change to the config files in the subfolder, so there's essentially limited to no benefit to using a subfolder and symlinking into `$HOME` (as well as intentionality of adding files to track just transitions from `-f`'ing the `add` to `mv`'ing the file and symlinking it, so there's no less overhead either), especially when I would like to use this across multiple environments that will behave differently with symlinks, including the shadow-realm of being in the context of `wsl` when open on a Windows home folder with this checked out!
+_This_ is _**my**_ dotfile repository. It follows the ["`$HOME` is a repo"](https://github.com/Skenvy/dotfiles/blob/main/devlog.md#home-is-a-repo) pattern, with bells attached. See the [devlog](https://github.com/Skenvy/dotfiles/blob/main/devlog.md) for more.
 
-This is not a unique pattern, but it's not the most common either. On the [gh dotfile io tutorial](https://dotfiles.github.io/tutorials/) page, [Drew](https://drewdevault.com/)'s [blog post](https://drewdevault.com/2019/12/30/dotfiles.html) appears to be the only example that suggests / outlines this approach, and it's worth a read.
+This dotfile repository is setup in a way that it follows "`$HOME` is a repo", in multiple ways.
+1. "`$HOME` is _this_ repo" -- you can directly clone this on top of `$HOME`.
+1. "`$HOME` is _another_ repo" -- you add this as a submodule in your own dotfiles repo ~= `$HOME`.
+## Pre-use
+### `git`+`ssh`
+To use any approach, you'll need to have `git` installed, as well as `ssh`, and have the `ssh-agent` running, and your key added to the agent, and uploaded to GitHub. See [my ssh gist](https://gist.github.com/Skenvy/8e16d4f044707e63c670f5b487da02c0) for steps on how to handle setting up `ssh` on Ubuntu or Windows (pay close attention to the step for setting `"GIT_SSH"` if you're on Windows). If you already have `ssh` setup and `git` installed, then you're ready to continue to one of the below steps!
+### `~/.include/*`
+A critical feature that underpins all approaches to using these dotfiles effectively, you should be aware of this directory. Different config files are allowed to independently expect or optionally hook various files that should or must be kept under `~/.include/*`. They provide a means for "core" or "centralised" or "shared" configuration to be kept in this repository, but also allows "extensible" configuration files, that are "core" files with the ability to seek out "extension" configuration files, that needn't or shouldn't be checked-in here. "Extensible" just means files that can attempt to parse other files in `~/.include/*` and will composite or allow overwriting of "core" (checked-in here) config, by the "extension" configuration files that you will have to independently maintain in `~/.include/*`.
 
-There are however several ways in which this follows a very specifically modified version of the "`$HOME` is a repo" pattern.
-### `$HOME` is a repo, _but_ ...
-... only if you are cloning this. Later on I discuss a very rigid process of adopting these settings as a submodule, which is antithetical to "`$HOME` is a repo", but provides a methodology of adopting "core" configuration, while also checking in "extended" configuration, by using the `~/.includes/` files. This is primarily done to facilitate use-cases where you want to keep configuration checked in, but it can't or shouldn't be hosted in a public repository.
-### `$HOME` is a repo, **and** ...
-... extensible, if you're happy to not check-in your _extended_ configuration (by design). You can clone this, following the steps outlined below that describe how to do the initial setup of your local copy, over the top of an existing `$HOME`. Once you have it cloned, it will only track changes to files that are already being tracked, as the `.gitignore` of just `*` allows us to only track what we intentionally forcefully add. That's not the end though. There's places that "extensible" configuration files might look to try and find files that are optionally sourced or to hook-in, if they exist.
-
-You should read both the `~/.include/.pre/README.md` and the `~/.include/.post/README.md` for examples or suggestions of extensions to place in either folder. The first example you might find necessary, for example, is to create an `~/.include/.post/.bashrc` and add a line that does `ssh-add-unloaded-key "Name_of_your_main_ssh_key"`, to have your main ssh key used most frequently loaded. Why not keep something like that in the "core" `~/.bashrc`? Well, on different machines, a different key might be the most frequently used, and if multiple keys that are valid for the same host are added, only the first one that's accepted by a host will be tried for authenticating. So it's easiest across multiple machines that adopt these configs to allow something like that to exist in the "extended" config. Similar reasons exist everything else.
-
-A `#TODO` is to add scripts that generate the recommendations contained in `~/.include/.pre/README.md` and the `~/.include/.post/README.md`, but for now, their recommendations are the expected starting point.
-### `$HOME` is _another_ repo
-#### Submodule approach
-The process of using the `~/.include/` configuration files as a way of extending the "core" configuration, with the expectation of not checking in anything under `~/.include/`, lends itself to the possibility of making use of this repository as a submodule in another repository, and symlinking the contents in this onto `$HOME`. This is discussed in more detail below.
-#### Fork approach
-This is only a `#TODO` if I ever have to use a windows device for work again, until then, I can't be bothered.
-## Adopt these configurations
-* If `~` is empty:
-```sh
-cd ~ && git clone https://github.com/Skenvy/dotfiles.git .
-```
-* If `~` is _NOT_ empty:
-```sh
-cd ~ && git init && git remote add origin https://github.com/Skenvy/dotfiles.git && git fetch && cp -r .git/refs/remotes/origin/* .git/refs/heads/ && git remote set-head origin -a && REMOTE_HEAD=$(git name-rev origin/HEAD --name-only) && rm .git/refs/heads/* && git checkout -b $REMOTE_HEAD origin/$REMOTE_HEAD -f
-```
-* If `~` is _NOT_ empty, and you want to use _only_ `git`:
-```sh
-cd ~ && git init && git remote add origin https://github.com/Skenvy/dotfiles.git && git fetch && git remote set-head origin -a && HEADSHA=$(git rev-parse origin/HEAD) && git remote set-head origin -d && REMOTE_HEAD=$(git name-rev $HEADSHA --name-only) && git checkout -b main $REMOTE_HEAD -f
-```
+See both [`~/.include/.pre/README.md`](https://github.com/Skenvy/dotfiles/blob/main/.include/.pre/README.md) and [`~/.include/.post/README.md`](https://github.com/Skenvy/dotfiles/blob/main/.include/.post/README.md) for the two most commonly parsed folders, that provide suggestions on what config files to add in either place. For an illustrative example of this, have a look at [how to add your ssh key setup to `.bashrc`](https://github.com/Skenvy/dotfiles/blob/main/.include/.post/README.md#bashrc-example).
+## Use as "`$HOME` is _this_ repo"
+If you're planning to accept this repo into your `$HOME`, you're doing so aware that these steps will <span style="color:red">destructively</span> replace files of the same name that exist in your `$HOME` already.
+You would typically be interested in following this step as one of the first things you do setting up a new machine, so the destructivity would be limited to only replacing the user files that the system had generated for you. If you're following this step at some other point well after you've been using your machine for a while, chances are that customisations and personal settings might have crept in to your local dotfiles.
 * If `~` is _NOT_ empty, and you want to use _only_ `git`, and you want to use ssh:
 ```sh
 cd ~ && git init && git remote add origin git@github.com:Skenvy/dotfiles.git && git fetch && git remote set-head origin -a && HEADSHA=$(git rev-parse origin/HEAD) && git remote set-head origin -d && REMOTE_HEAD=$(git name-rev $HEADSHA --name-only) && git checkout -b main $REMOTE_HEAD -f
