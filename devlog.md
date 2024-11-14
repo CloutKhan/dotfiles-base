@@ -47,6 +47,8 @@ rm -rf .git/ && cd ~ && git init && git remote add origin git@github.com:Skenvy/
 ## Use this as a base with your own `.include`'s
 To use these configs as an extensible base, where you can track this repository and use its contents, you should add this repository as a submodule in your own dotfiles repository, and symlink its contents into `$HOME`. This lets you use and stay up-to-date with changes to **this**, but also allows you to commit any additional files you need, provided they wont just get symlinked over by following this process.
 
+<!-- don't change the below title, it's anchor linked-to -->
+### submodule-original-motivation
 > [!IMPORTANT]
 > This is specifically geared to my use case of wanting to maintain personal, public, dotfiles that I utilise on personal machines, that I can also utilise on any work machine, for which it would be convenient to use a private repository such that I can commit the `.include/*` hooks relevant for work that shouldn't be public, but that I don't want to lose to the ether. This method allows for maintaining these personal, public, dotfiles, that I can submodule into a private, work specific, dotfiles repository, symlink into `$HOME`, and commit any `.include/*` hooks as they grow.
 
@@ -83,3 +85,6 @@ With the submodule initialised and updated we can now symlink its contents into 
 
 > [!IMPORTANT]
 > Note that the process of linking files into `$HOME` wont touch several files, listed in the script. You should ideally have a `~/.gitignore` of just `*` and a `~/.gitattributes` of just `* text=auto`.
+
+## Images in the readme
+Images are stored in the wiki and sourced in the html of the readme. `git clone git@github.com:Skenvy/dotfiles.wiki.git`, then you can find the images in `(dotfiles.wiki)/.meta/banners/` and access them via https://raw.githubusercontent.com/wiki/Skenvy/dotfiles/.meta/banners/
