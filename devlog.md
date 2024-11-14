@@ -1,7 +1,8 @@
 # [Devlog](https://github.com/Skenvy/dotfiles/blob/main/devlog.md)
 A wild west of stuff that used to be in the readme, or are notes I wrote for myself. If you got here on an anchor link, that section should be relevant at least.
 ## Prelim
-### `$HOME` is a repo <!-- don't change this title, it's anchor linked-to -->
+<!-- don't change the below title, it's anchor linked-to -->
+### `$HOME` is a repo
 This follows the flat splat pattern of just saying "`$HOME` is a repo".
 
 Rather than cloning into something like `~/dotfiles` and using some `install.sh` script or `stow`, this adopts the pattern that `$HOME` _is_ this repository. The magic, is a `.gitignore` of just `*`, coupled with the intentionality of `git add -f`'ing the files that I want tracked here. Using a subfolder and moving config into it and symlinking that back out to home wouldn't reduce the amount of clutter in `$HOME`, and it doesn't prevent changes from affecting change to the config files in the subfolder, so there's essentially limited to no benefit to using a subfolder and symlinking into `$HOME` (as well as intentionality of adding files to track just transitions from `-f`'ing the `add` to `mv`'ing the file and symlinking it, so there's no less overhead either), especially when I would like to use this across multiple environments that will behave differently with symlinks, including the shadow-realm of being in the context of `wsl` when open on a Windows home folder with this checked out!
