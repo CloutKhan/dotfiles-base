@@ -36,11 +36,11 @@ See the docs on:
 
 <details>
 
-<summary>How to check-in your gpg conf files according to this repo's dotfile pattern</summary>
+<summary><i>How to check-in your gpg conf files according to this repo's dotfile pattern</i></summary>
 
-To check-in our user config for GPG, `~/.gnupg/*.conf`, without being able to make use of our [dotfile inclusion methodology](https://github.com/Skenvy/dotfiles/tree/main?tab=readme-ov-file#include) _because GPG does not have any sort of inclusion mechanism_, yet still adhere to both patterns that we support (where this repo is either `$HOME` itself or a submodule that we symlink into `$HOME` with clobber protection), we must use the [`CLOBBER_CHECKEDIN_ROOT_IGNORELIST` option](https://github.com/Skenvy/dotfiles/tree/main?tab=readme-ov-file#dotfiles-submodule-symlinks) in our [submodule support script](./bin/dotfiles-submodule-symlinks) (see the example  [base dotfiles-submodule-symlinks-hook](https://github.com/Skenvy/dotfiles/blob/base/.include/dotfiles-submodule-symlinks-hook.sh) where you would need to list any gpg config files you would add to a repository that would submodule this one).
-
-The first time you run gpg it may or may not create any of the config files and populate them with some options. Most notably `use-keyboxd` is a default option that will frequently appear in `common.conf` these days.
+> To check-in our user config for GPG, `~/.gnupg/*.conf`, without being able to make use of our [dotfile inclusion methodology](https://github.com/Skenvy/dotfiles/tree/main?tab=readme-ov-file#include) _because GPG does not have any sort of inclusion mechanism_, yet still adhere to both patterns that we support (where this repo is either `$HOME` itself or a submodule that we symlink into `$HOME` with clobber protection), we must use the [`CLOBBER_CHECKEDIN_ROOT_IGNORELIST` option](https://github.com/Skenvy/dotfiles/tree/main?tab=readme-ov-file#dotfiles-submodule-symlinks) in our [submodule support script](./bin/dotfiles-submodule-symlinks) (see the example  [base dotfiles-submodule-symlinks-hook](https://github.com/Skenvy/dotfiles/blob/base/.include/dotfiles-submodule-symlinks-hook.sh) where you would need to list any gpg config files you would add to a repository that would submodule this one).
+>
+> The first time you run gpg it may or may not create any of the config files and populate them with some options. Most notably `use-keyboxd` is a default option that will frequently appear in `common.conf` these days.
 
 </details>
 
@@ -48,9 +48,14 @@ The first time you run gpg it may or may not create any of the config files and 
 
 <details>
 
-<summary>... or why we DON'T symlink for gpg.</summary>
+<summary><i>... or why we DON'T symlink for gpg.</i></summary>
 
-WSL doesn't currently have anything that matches `/etc/skel/.gnupg/*`, so for WSL's perpective, we'd need to make these files ourselves if we care to. However, Windows installations of GPG use `~/AppData/Roaming/gnupg/*`. We could theoretically support a "single point of config" by symlinking our Windows `~/AppData/Roaming/gnupg/*` to WSL `~/.gnupg/*`, and this would be the simplest way to have both be aware of the same keys. However, the versions of gpg that can be installed on windows, in Ubuntu, and come pre-included in "git bash" all appear to have slight variations in their version and internal key-store. On top of this, the version of gpg that comes with "git bash" uses the Windows home folder's `~/.gnupg` the same as in WSL / Mac, which would clash with any attempt to symlink WSL's `~/.gnupg` and Windows `~/AppData/Roaming/gnupg/*` to Windows `~/.gnupg`. For example my current installation of git-bash includes a gpg version old enough that it does not work with the `keyboxd` setting, which is now the _default_ setting in the versions of gpg that are already installed in WSL, Mac's latest brew, _and_ the latest Windows build.
+> WSL doesn't currently have anything that matches `/etc/skel/.gnupg/*`, so for WSL's perpective, we'd need to make these files ourselves if we care to.
+> However, Windows installations of GPG use `~/AppData/Roaming/gnupg/*`.
+> We could theoretically support a "single point of config" by symlinking our Windows `~/AppData/Roaming/gnupg/*` to WSL `~/.gnupg/*`, and this would be the simplest way to have both be aware of the same keys.
+> However, the versions of gpg that can be installed on windows, in Ubuntu, and come pre-included in "git bash" all appear to have slight variations in their version and internal key-store.
+> On top of this, the version of gpg that comes with "git bash" uses the Windows home folder's `~/.gnupg` the same as in WSL / Mac, which would clash with any attempt to symlink WSL's `~/.gnupg` and Windows `~/AppData/Roaming/gnupg/*` to Windows `~/.gnupg`.
+> For example my current installation of git-bash includes a gpg version old enough that it does not work with the `keyboxd` setting, which is now the _default_ setting in the versions of gpg that are already installed in WSL, Mac's latest brew, _and_ the latest Windows build.
 
 </details>
 
@@ -73,13 +78,17 @@ We'll need to know the path that gpg was installed to later when setting the git
     * get the path with `which -a gpg` (and `type gpg`)
 1. For Windows, the "Simple installer for the current GnuPG" on the [gnupg downloads](https://www.gnupg.org/download/) page is the easiest option.
     * get the path with `where gpg` (cmd) or `(Get-Command gpg).source` (pwsh)
+    * If you need a specific _version_ you can find all versions [here](https://www.gnupg.org/ftp/gcrypt/binary).
+        * They are versioned `gnupg-w32-*_*.exe`.
+        * First by the version's semver, and then by build date.
+        * At the time this was initially written: `2.4.8` was the latest.
 
 > [!WARNING]
 > For Windows users, the included pin-entry program may not function properly if it is installed without specifically installing it as an admin. So make sure you install it as admin to ensure the pin-entry program works!
 >
 > If you install the "Simple installer ..." as an admin, it should by default end up in `C:\Program Files (x86)\GnuPG\bin\gpg.exe`. If you install it without elevating to admin it will install to your user specific `AppData/Local` folder.
 >
-> If you have an install in your `AppData/Local` and you're experiencing issues with pin-entry, delete that install, clear the path entries for it, and reinstall as admin.
+> **If you have an install in your `AppData/Local` and you're experiencing issues with pin-entry, delete that, or all, install(s), clear the path entries for it, and reinstall as admin.**
 >
 > Regardless of install location, `gpg --version` on Windows will tell you your `HOME` is in your `AppData/Roaming`. This is expected.
 
