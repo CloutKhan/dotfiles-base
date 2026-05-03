@@ -1,4 +1,4 @@
-# SSH
+# [SSH](https://github.com/Skenvy/dotfiles/blob/main/.ssh/README.md)
 > [!NOTE]
 > These tips _originally_ started in [this gist](https://gist.github.com/Skenvy/8e16d4f044707e63c670f5b487da02c0#ssh).
 >
@@ -19,15 +19,35 @@ See the docs on:
 * [SSH's "include" directive](https://man.openbsd.org/ssh_config#Include)
 * [Using ssh with vs code devcontainers](https://code.visualstudio.com/remote/advancedcontainers/sharing-git-credentials)
 
-## First time setup
+## Dotfiles setup
 > [!CAUTION]
-> This section is only relevant if you are setting up your dotfiles repo to check-in your `~/.ssh/config`, or looking for the discussion on sharing keys between `WSL` and `Windows`.
+> This "Dotfiles setup" section is only relevant if you are setting up your dotfiles repo to check-in your `~/.ssh/config`.
 > If you are not, then the rest of this guide is still situationally useful, but this section will be irrelevant.
+>
+> Because these subsections are only contextually relevant to this repository's "dotfile repository pattern" rather than being generically applicable to setting up SSH, they are collapsed `<details>` blocks, to avoid someone reading them without reading this context aware preface and falsely assuming that understanding them is a necessary step before following the rest of this guide.
+
+<details>
+
+<summary><i>I acknowledged the caution but want to read this section anyway</i></summary>
+
 ### Dotfiles
+
+<details>
+
+<summary>How to check-in your ssh config file according to this repo's dotfile pattern</summary>
+
 To check-in our only user config for SSH, `~/.ssh/config`, in such a way that it can be extended when _this_ repo's [dotfile inclusion methodology](https://github.com/Skenvy/dotfiles/tree/main?tab=readme-ov-file#include) is followed, we make use of SSH's `Include` directive in our checked-in `~/.ssh/config`.
 
 To make it easier to use the same keys between a `Windows` machine and a `WSL` instance on it, we can symlink the keys _from_ Windows to WSL. If you would rather manually copy each of the keys as you make them, that won't interfere with the config being checked in, but it will mean the rest of this "setup" section will be irrelevant.
-### Symlink the _whole_ directory (NOT checked-in config)
+
+</details>
+
+### WSL: Symlink the _whole_ directory
+
+<details>
+
+<summary>The simpler option, which does NOT check-in config</summary>
+
 If you are looking for how to symlink your whole SSH folder from Windows to WSL to use the same keys and config, but are not bothered with checking-in your config, then the easiest option is the following, which DOESN'T support checked-in config.
 
 From within WSL;
@@ -37,7 +57,15 @@ YOUR_WINDOWS_USERNAME=example
 mkdir -p /mnt/c/Users/$YOUR_WINDOWS_USERNAME/.ssh
 ln -s /mnt/c/Users/$YOUR_WINDOWS_USERNAME/.ssh ~/.ssh
 ```
-### Symlink each file/folder in the ssh folder (YES checked-in config)
+
+</details>
+
+### WSL: Symlink each file/folder in the ssh folder
+
+<details>
+
+<summary>The less simple option, which DOES check-in config</summary>
+
 To support periodically re-symlinking all files (except for `~/.ssh/config` and _this file_ (`~/.ssh/README`)) from my Windows `~/.ssh` to my WSL's `~/.ssh`, I make use of the following two aliases, which require a `LOCAL_WINDOWS_USERNAME` to be set [somewhere](https://github.com/Skenvy/dotfiles/tree/main/.include/.pre#bashrc) (e.g. I personally set mine in my `~/.include/.pre/.bashrc`);
 ```bash
 # LOCAL_WINDOWS_USERNAME set in some bashrc before these aliases are used
@@ -46,16 +74,112 @@ alias wsl_resym_ssh="( shopt -s dotglob; WINDOWS_PATH=\"/mnt/c/Users/\$LOCAL_WIN
 ```
 If you're using this repository as a template for your own dotfiles, these aliases exist in my [`home`](https://github.com/Skenvy/dotfiles/blob/home/.bash_aliases) but I don't keep aliases in the `main` branch because they are too flavoured for what is supposed to be a bland/basic `main`.
 Note that the alias `wsl_resym_ssh` only works as expected while we only track files directly in the `.ssh` folder, and would break if we checked-in anything nested in a folder. This works here because all I have accounted for checking in is my `~/.ssh/config` and this `~/.ssh/README.md`.
+
+</details>
+
+</details>
+
+## Be "aware" (of which examples in this you want to use)
+> [!CAUTION]
+> If you're following on a Mac, follow the `bash` examples, and the other examples will be irrelevant.
+>
+> If you're on a WSL and only want to work in WSL and skip Windows, also just focus on the `bash` examples.
+>
+> If you're on Windows, and you _don't want to use WSL_ then you'll need to follow the `cmd` and/or `pwsh` alternatives.
+>
+> If you're setting up WSL _AND_ Windows _together_, you will have additional setup requirements in the below 'Be "Home Aware"' warning.
+
+> [!NOTE]
+> The below are micro explanations to justify this TLDR.
+>
+> You only truly need to be "aware" of all these things if you're following this whole guide as a single cohesive strategy.
+>
+> If you already know what you came here for, or just to read a specific example, then you probably don't "need to be aware."
+### Be "OS Aware"
+
+<details>
+
+<summary><i>Why Mac and WSL "only" should both follow the <code>bash</code> examples</i></summary>
+
+<!-- > [!WARNING] -->
+> Although this guide is "about" SSH, it is, broadly, _geared_ towards _enabling_ WSL.
+>
+> This doesn't really sacrifice any clarity, because all the example commands given for WSL should all work in Mac's [_ancient_ version of bash](https://github.com/Skenvy/dotfiles/tree/main/.MacOS#bash) as well.
+>
+> So Mac and WSL "only" should be equivalent.
+
+</details>
+
+### Be "Shell Aware"
+
+<details>
+
+<summary><i>Acknowledging that <code>cmd</code> and <code>pwsh</code> are not interchangeable</i></summary>
+
+<!-- > [!WARNING] -->
+> WSL lives inside Windows, _not_ Mac, and quite a lot of commands later are specifically intended for running in _either_ of the two, unique, Windows shells; `cmd` or `pwsh`, but not both.
+>
+> Ideally a code example should either state or be _overwhelming_ implied, as to whether an example is intended for `bash` in either case of WSL or MacOS, or specifically which of the differently behaving `cmd` or `pwsh` in Windows cases.
+>
+> So Windows users will need to be cognizant of _which_ of the two different "Windows shells", `cmd` or `pwsh`, they are using, for each individual example.
+
+</details>
+
+### Be "Home Aware"
+
+<details>
+
+<summary><i>Windows <code>~/</code> is different from WSL's <code>~/</code>. Know which one you're in!</i></summary>
+
+<!-- > [!WARNING] -->
+> If you're setting up WSL _AND_ Windows _together_, and you want to have them _share_ keys, you'll need to be aware of which HOME you're using in any given context.
+>
+> "HOME" will be different from your Windows and WSL's perspective: the `~/.ssh` you navigate to from inside WSL will be different from the `~/.ssh` you navigate to outside of WSL.
+>
+> If you want both WSL and Windows to share the _SAME_ `~/.ssh`, this is possible!
+>
+> WSL can utilise symlinks to setup its own internal view of what _its_ `~/.ssh` is, by setting it as a symlink to the fully realised path of what would be `~/.ssh` from Window's perspective. Windows "junctions" can't reach inside of WSL's filesystem, so in any case, Windows `~/.ssh` will have to be the source of truth, and WSL will have to be told to use it too.
+>
+> If you truly do want to do this, two different strategies are suggested in the above ["Dotfiles Setup"](#dotfiles-setup) section.
+>
+> If you aren't sure yet, or don't want to do this quite yet, if you follow setting up the Windows only side of things, the symlinking strategies in the above ["Dotfiles Setup"](#dotfiles-setup) section can be done at any point in time afterwards, they don't need to be done concurrently.
+>
+> Once both Windows and WSL's `~/.ssh` are symlinked, assuming you chose this, you can access the same keys from both, and you can follow the `bash` steps where both `bash` and `cmd`|`pwsh` are available for something.
+
+</details>
+
 ## Creating a new key
-To connect from "this machine" to a new GH account. While `~` will be different from your Windows and WSL's perspective, WSL's `~/.ssh` _should_ be a **soft link** to your window's `~/.ssh`, so it's ok to use either.
+In `bash`
 ```bash
 # Make the key
 EMAIL=your_email@example.com
 KEYNAME=GH_Username
 ssh-keygen -t ed25519 -C "$EMAIL" -f ~/.ssh/$KEYNAME
 ```
+In `pwsh`
+```pwsh
+# Make the key
+$EMAIL = "your_email@example.com"
+$KEYNAME = "GH_Username"
+ssh-keygen -t ed25519 -C "$EMAIL" -f "$HOME/.ssh/$KEYNAME"
+```
+In `cmd`
+```cmd
+set EMAIL=your_email@example.com
+set KEYNAME=GH_Username
+ssh-keygen -t ed25519 -C "%EMAIL%" -f "%userprofile%\.ssh\%KEYNAME%"
+```
 ## Upload the public key
-Upload the public key `cat ~/.ssh/$KEYNAME.pub` to https://github.com/settings/ssh/new as an "Authentication Key" with some name.
+Upload the public key to https://github.com/settings/ssh/new as an "Authentication Key" with some name.
+### Get the contents
+In `bash` or `pwsh` (assuming you still have `KEYNAME` set from creating above)
+```bash
+cat ~/.ssh/$KEYNAME.pub
+```
+In `cmd` (assuming you still have `KEYNAME` set from creating above)
+```cmd
+type "%userprofile%\.ssh\%KEYNAME%.pub"
+```
 ## Add the new key to the ssh-agent
 ### Enable `chmod`'ing' the keys stored in Windows filesystem from WSL
 If you're going to `chmod` you might need to add the following to `sudo vi /etc/wsl.conf` from WSL
