@@ -101,7 +101,7 @@ Note that the alias `wsl_resym_ssh` only works as expected while we only track f
 
 <summary><i>Why Mac and WSL "only" should both follow the <code>bash</code> examples</i></summary>
 
-> [!WARNING]
+<!-- > [!WARNING] -->
 > Although this guide is "about" SSH, it is, broadly, _geared_ towards _enabling_ WSL.
 >
 > This doesn't really sacrifice any clarity, because all the example commands given for WSL should all work in Mac's [_ancient_ version of bash](https://github.com/Skenvy/dotfiles/tree/main/.MacOS#bash) as well.
@@ -116,7 +116,7 @@ Note that the alias `wsl_resym_ssh` only works as expected while we only track f
 
 <summary><i>Acknowledging that <code>cmd</code> and <code>pwsh</code> are not interchangeable</i></summary>
 
-> [!WARNING]
+<!-- > [!WARNING] -->
 > WSL lives inside Windows, _not_ Mac, and quite a lot of commands later are specifically intended for running in _either_ of the two, unique, Windows shells; `cmd` or `pwsh`, but not both.
 >
 > Ideally a code example should either state or be _overwhelming_ implied, as to whether an example is intended for `bash` in either case of WSL or MacOS, or specifically which of the differently behaving `cmd` or `pwsh` in Windows cases.
@@ -131,7 +131,7 @@ Note that the alias `wsl_resym_ssh` only works as expected while we only track f
 
 <summary><i>Windows <code>~/</code> is different from WSL's <code>~/</code>. Know which one you're in!</i></summary>
 
-> [!WARNING]
+<!-- > [!WARNING] -->
 > If you're setting up WSL _AND_ Windows _together_, and you want to have them _share_ keys, you'll need to be aware of which HOME you're using in any given context.
 >
 > "HOME" will be different from your Windows and WSL's perspective: the `~/.ssh` you navigate to from inside WSL will be different from the `~/.ssh` you navigate to outside of WSL.
