@@ -83,15 +83,19 @@ We'll need to know the path that gpg was installed to later when setting the git
         * First by the version's semver, and then by build date.
         * At the time this was initially written: `2.4.8` was the latest.
 
+### Windows install quirks
+#### Windows pin-entry issue
 > [!WARNING]
 > For Windows users, the included pin-entry program may not function properly if it is installed without specifically installing it as an admin. So make sure you install it as admin to ensure the pin-entry program works!
 >
 > If you install the "Simple installer ..." as an admin, it should by default end up in `C:\Program Files (x86)\GnuPG\bin\gpg.exe`. If you install it without elevating to admin it will install to your user specific `AppData/Local` folder.
->
+#### Windows pin-entry issue first fix to try!
+> [!CAUTION]
 > **If you have an install in your `AppData/Local` and you're experiencing issues with pin-entry, delete that, or all, install(s), clear the path entries for it, and reinstall as admin.**
->
-> Regardless of install location, `gpg --version` on Windows will tell you your `HOME` is in your `AppData/Roaming`. This is expected.
-
+#### Windows `HOME` is _supposed to be_ `AppData/Roaming`
+> [!NOTE]
+> _**Regardless**_ of install location, `gpg --version` on Windows will tell you your `HOME` is in your `AppData/Roaming`. This is _**expected**_, and _**not an issue**_, like the presence of a broken install in `AppData/Local` is an issue.
+#### Windows users should _**avoid**_ `git bash`
 > [!CAUTION]
 > For Windows users we specifically recommend _against_ using the version of gpg packaged with `git bash`, that would have been installed by [git for windows](https://git-scm.com/install/windows), as it can be significantly older than the current version on the [gnupg downloads](https://www.gnupg.org/download/) page, and it uses a different internal format to store keys. It will be the default gpg used by git inside of the `git bash` program, but will be difficult to use _outside_ of `git bash`.
 >
