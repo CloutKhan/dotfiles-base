@@ -130,6 +130,7 @@ prompt_shopts() {
   fi
 }
 
+##### Very long, opinionated, PS1
 if [ "$color_prompt" = yes ]; then
 # It's nice to keep the rest of the file to shorter lines but our PS1 here is
 # going to be using a lot of long var names from ~/.bash_formatting so we're
@@ -199,7 +200,9 @@ if ! shopt -oq posix; then
   fi
 fi
 
-# SSH+GPG
+##### GIT+SSH+GPG
+source-existing-file ~/.gitconfig/apply.sh
+
 if [ -z "$SSH_AUTH_SOCK" ] ; then
     eval `ssh-agent -s` > /dev/null
 fi

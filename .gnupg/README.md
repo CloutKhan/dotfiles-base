@@ -1,4 +1,4 @@
-# GPG
+# [GPG](https://github.com/Skenvy/dotfiles/blob/main/.gnupg/README.md)
 > [!NOTE]
 > These tips _originally_ started in [this gist](https://gist.github.com/Skenvy/8e16d4f044707e63c670f5b487da02c0#gpg).
 >
