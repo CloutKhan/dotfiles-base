@@ -47,11 +47,12 @@ Thus I needed to find a way to preserve my original intention of utilising `[inc
 ### Finding the best new method
 There are potential workarounds, such as setting bind mounts on a devcontainer settings file, but these require that you control the devcontainer configuration as well.
 
-None of the workarounds I found worked well for the situation of:
-* wanting to check-in a _partial state_ (`[include]` reliant) of `~/.gitconfig`
-* wanting there to be a mechanism to extend the partial state of `~/.gitconfig`
-* wanting the fully resolved state of `~/.gitconfig` to be loaded in to a devcontainer
-* not have to edit a `devcontainer.json` to enable this, either by bind mounts or `postCreateCommand`
+> [!IMPORTANT]
+> None of the workarounds I found worked well for the situation of:
+> * wanting to check-in a _partial state_ (`[include]` reliant) of `~/.gitconfig`
+> * wanting there to be a mechanism to extend the partial state of `~/.gitconfig`
+> * wanting the fully resolved state of `~/.gitconfig` to be loaded in to a devcontainer
+> * **not have to edit a `devcontainer.json` to enable this**; _either by_ `type=bind` `mounts` _or_ `postCreateCommand`
 
 If we want our config to work with _any_ devcontainer, the fix must be to the way we maintain the `~/.gitconfig`, assuming we can't justify setting other repository's `devcontainer.json`'s to handle our specific dotfiles setup in _their_ bind mounts / scripted lifecycle commands.
 Unfortunately, currently, to the best of my knowledge, there is no mechanism to provide a devcontainer implementation with "devcontainer dotfiles" that instruct it to override a `devcontainer.json` with personally configured mount options or override the scripted lifecycle commands set in each `devcontainer.json`.
@@ -74,9 +75,15 @@ A middle ground between either checking in an entire config _with_ possibly sens
 Using either of these **inclusion directives**, it's possible to check-in a _core set_ of configuration options that would be reasonable in any environment, and then extend them with other options in other files that don't need to be checked-in.
 
 This also provides a means for someone to distribute _core global settings_, say, via a dotfiles repository, that others could adopt without requiring to change them, and provide a means for any consumer to add one of the "included" files, that will then inject their more personal settings in to git's global config.
-### Examples of how other dotfiles repositories handle this:
+### Examples of how other dotfiles repositories check-in their `~/.gitconfig`:
+This isn't strictly necessary info, just nice to take the pulse on what others are doing. This list is just some examples from [dotfiles.github.io](https://dotfiles.github.io/bootstrap/) and from asking copilot if it had any tricks in mind.
+* [mathiasbynens/dotfiles' ~/.gitconfig](https://github.com/mathiasbynens/dotfiles/blob/b7c7894e7bb2de5d60bfb9a2f5e46d01a61300ea/.gitconfig) (most starred repo on [dotfiles.github.io](https://dotfiles.github.io/bootstrap/))
+    * Doesn't use `[include]`
+    * _Does_ provide an alternative repo specific _general_ inclusion mechanism via "[`~/.extra`](https://github.com/mathiasbynens/dotfiles/blob/b7c7894e7bb2de5d60bfb9a2f5e46d01a61300ea/README.md#add-custom-commands-without-creating-a-new-fork)", though..
 * [paulirish/dotfiles' ~/.gitconfig](https://github.com/paulirish/dotfiles/blob/d27a39a78a36bc5548e320f9bcc064f13b3c0323/.gitconfig#L176-L178)
     * Uses `[include].path = ~/.gitconfig.local`
+* [jessfraz/dotfiles'  ~/.gitconfig](https://github.com/jessfraz/dotfiles/blob/60001dd6638daa0275020807fd948c4d22fb7741/.gitconfig#L195-L200)
+    * Checks-in their user specific settings and machine specific key setting.
 ### Original implementation
 The approach originally used by this dotfiles repository consisted of this [`~/.gitconfig`][original ~/.gitconfig].
 Checked-in as the `./.gitconfig`, it would be checked-out on to your `~/.gitconfig` directly, or symlinked to it if you used this repository's suggested "use as a submodule" approach.
