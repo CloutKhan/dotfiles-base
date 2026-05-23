@@ -1,8 +1,18 @@
 #!/bin/bash
+# Although this is shebanged we leave .sh to differentiate from an adjacent .ps1
 
 # This script is used to read and apply the git config settings configured by
 # the ~/.gitconfig.base and write them to ~/.gitconfig. See the adjacent README
 # for a thorough explanation of "why" we managed ~/.gitconfig this way.
+
+# NOTE: The git command that this relies on, `git config --list`, only behaves
+# as we require it to for this, if it is NOT given a --file option, and instead
+# left to the default of the home gitconfig. Because of this, we can't build in
+# a way to allow a "test" run, at least, we can make a "dry" run by simply not
+# writing output on to the ~/.gitconfig, but we can't test running it on a
+# different global config, without manually tweaking the actual global config
+# anyway! So changes made to this need to be tested on the home checkout, not
+# in a nested workspace checkout -- at least for final verification.
 
 set -eu
 

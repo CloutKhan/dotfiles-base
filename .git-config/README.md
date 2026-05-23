@@ -46,12 +46,14 @@ It is a somewhat common (at least, not uncommon...) practice to include a whole,
 > [!IMPORTATION]
 > The method we use to maintain our `~/.gitconfig`:
 > 1. Write your settings as you would normally, but add them to `~/.gitconfig.base`
+> 1. Be aware of the presence of `~/.gitconfig.init`, but don't change it!
 > 1. Follow the inclusion instructions in:
 >     * [.include/.pre/.gitconfig](https://github.com/Skenvy/dotfiles/blob/main/.include/.pre/README.md#gitconfig) for OS specific configuration, like `autocrlf`, `filemode`, etc.
 >     * [.include/.post/.gitconfig](https://github.com/Skenvy/dotfiles/blob/main/.include/.post/README.md#gitconfig) for settings like your name, email, or gpg key ID
 > 1. Run one of the available "apply" scripts here that will bundle your inclusions together
->     * [apply.sh](./apply.sh) for Linux/MacOS -- WIP.
->     * PowerShell script is still WIP.
+>     * [apply.sh](./apply.sh) for Linux/MacOS
+>     * [apply.ps1](./apply.ps1) for Windows
+> 1. If some config had been intermittently set in `~/.gitconfig` but not adopted by `~/.gitconfig.base` (or anything included by it), then these `apply.*` scripts will produce a `~/.gitconfig.diff` with the differing config captured. This is per run, so be sure to check it after each run if there was a difference!
 
 ### _Reason_ for the unconvential method this guide suggests
 Historically, my personal push to adopt this method came about while figuring out how to adopt [devcontainers][.devcontainer/README.md], and stumbling on the clash between my _already existing_ use of `[includes]` in my _already-checked-in_ [`~/.gitconfig`][original ~/.gitconfig], clashing with the manner in which the [devcontainers automatic git integration][vsc devcontainers git] copies exclusively the one global file, and doesn't resolve the global state, thus dropping any `[include]`'d settings. Which is where I kept / keep my username and email, amongst other OS specific settings.
