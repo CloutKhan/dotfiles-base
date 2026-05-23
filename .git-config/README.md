@@ -3,6 +3,7 @@
 [includepath]: https://git-scm.com/docs/git-config#Documentation/git-config.txt-includepath
 [includeIfconditionpath]: https://git-scm.com/docs/git-config#Documentation/git-config.txt-includeIfconditionpath
 [vsc devcontainers git]: https://code.visualstudio.com/remote/advancedcontainers/sharing-git-credentials
+[reason]: #reason-for-the-unconvential-method-this-guide-suggests
 # [.gitconfig](https://github.com/Skenvy/dotfiles/blob/main/.git-config/README.md)
 > [!WARNING]
 > This guide explains a likely highly unconvential method for handling your `.gitconfig` files; by way of scripting their creation, rather than just checking in the actual `.gitconfig` itself.
@@ -13,7 +14,7 @@
 > 1. Have the state of these **inclusion directives** resolved _"""externally"""_ to `git`
 > 1. Use **inclusion directives**, but _avoid_ them being present in the "resolved" `.gitconfig`.
 >
-> You can see more about _why_ in the below "[_Reason_ for the unconvential method this guide suggests]()"
+> You can see more about _why_ in the below "[_Reason_ for the unconvential method this guide suggests][reason]"
 ---
 > [!TIP]
 > Some settings will usually best be set to different choices depending on your OS.
