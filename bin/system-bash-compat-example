@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# If you know where you definitely called this from, e.g. if this is sourced
+# from a script that alreadye expects to be called from a particular directory
+# e.g. calling "this" from the repo root via "./bin/system-bash-compat-example"
+source ./bin/system-bash-compat
+
+# You can also call this relative to "this script"
+THIS_SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+source $THIS_SCRIPT_DIR/.././bin/system-bash-compat
+
+# Unset / export them before running this if you want to see them change or
+# verify your hook was respected.
+echo PROCTOR_OLD_BASH was set to $PROCTOR_OLD_BASH
+echo PROCTOR_BSD_UTIL was set to $PROCTOR_BSD_UTIL

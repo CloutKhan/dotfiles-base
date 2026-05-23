@@ -1,0 +1,138 @@
+#!/bin/bash
+
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+# https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html
+set -e # Exit on error code
+set -u # Exit on unset variable
+# set -x # Print trace # Only when debugging.
+set -o pipefail # Exit codes cascade through pipelines.
+
+# _THIS_ repository's scripts that utilise system bash shebangs (#!/bin/bash)
+# [as opposed to $PATH's bash shebang (#!/usr/bin/env bash)] aim to support both
+# modern MacOS and Ubuntu (WSL).
+
+# Bash scripts in ~/bin/* should follow control variables set by this script
+# (PROCTOR_OLD_BASH and PROCTOR_BSD_UTIL) to request that they use the BSD util
+# options required on MacOS (which uses BSD utils instead of GNU coreutils...),
+# as well as requesting to limit bash usage to what was available in the ancient
+# version of bash on MacOS (3.2.57).
+
+# Enable verbose mode by default, disable by VERBOSE=false
+
+VERBOSE="${VERBOSE:-true}"
+
+vecho() {
+  [[ "$VERBOSE" == "true" ]] && echo "$@"
+}
+
+vprintf() {
+  [[ "$VERBOSE" == "true" ]] && printf "$@"
+}
+
+# Enable debug mode by setting DEBUG=true
+
+DEBUG="${DEBUG:-false}"
+
+INIT_X_OPT="$([[ $- == *x* ]] && echo on || echo off)"
+
+[[ "$DEBUG" == "true" ]] && set -x # || don't turn it off it we inherit it on
+
+[[ "$DEBUG" == "true" ]] && VERBOSE=true # if debug is on, then verbose is on
+
+# Return / exit helper
+
+# Use 'return' instead of 'exit' when sourced, if this is sourced during shell
+# start, we don't want to exit and brick the shell opening. Some scripts that
+# might want to use this might be set to run on shell start, e.g. sourced in
+# ~/.bashrc or similar, so returning instead of exiting is a good idea!
+return_code() {
+  if [[ "${BASH_SOURCE[0]}" != "${0}" ]]; then
+    return "$1" # Sourced — use return
+  else
+    exit "$1" # Executed — use exit
+  fi
+}
+
+# HOOKIN_SOURCE defaults to .include/hooks/system-bash-compat
+#     This is the PATH to a hook-in script that will be sourced if it exists.
+#     It provides a way to optionally source a script that can be used to add
+#     customisation in any of the provided ways, or any other way, if you know
+#     what you're doing. """Intended""" options are listed here;
+HOOKIN_SOURCE_DEFAULT=".include/hooks/system-bash-compat"
+: "${HOOKIN_SOURCE:=$HOOKIN_SOURCE_DEFAULT}"
+# PROCTOR_BSD_UTIL can be set to "true" if you want to manually configure this
+#     enact the same protections it has in place to ensure it operates OotB
+#     on MacOS (which uses BSD coreutils and not GNU...). Use this if you're on
+#     a BSD derivative.
+# PROCTOR_OLD_BASH can be set to "true" if you want to manually configure this
+#     to enact the same protections it has in place to ensure it operates OotB
+#     on MacOS (which has an ancient version of bash...). Use this if you're on
+#     Linux but stuck with an older system /bin/bash you can't upgrade.
+
+# Hook
+
+_PWD="$(pwd)"
+_HOOK_SOURCE="$_PWD/$HOOKIN_SOURCE"
+
+if [[ -f "$_HOOK_SOURCE" ]]; then
+  source "$_HOOK_SOURCE"
+else
+  vecho "Optional hook-in script '$_HOOK_SOURCE' does not exist, skipping."
+  if [[ "$HOOKIN_SOURCE" != "$HOOKIN_SOURCE" ]]; then
+    vecho "Optional hook-in script was non-default yet didn't exist. Exiting."
+    return_code 127
+  fi
+fi
+
+# Start compat check
+
+vecho # Newline
+vecho "Starting $0..."
+vprintf '#%.0s' {1..80} && vecho
+export KERNEL_NAME="$(uname)" # default is "uname -s"
+export KERNEL_NAME_RELEASE="$(uname -sr)"
+if [ "$KERNEL_NAME" = "Darwin" ]; then
+  export OS_NAME_VERSION="$(sw_vers -productName) $(sw_vers -productVersion)"
+  export PROCTOR_OLD_BASH="${PROCTOR_OLD_BASH:-true}"
+  export PROCTOR_BSD_UTIL="${PROCTOR_BSD_UTIL:-true}"
+elif [ "$KERNEL_NAME" = "Linux" ]; then
+  export OS_NAME_VERSION="$( . /etc/os-release && echo "$NAME $VERSION" )"
+  export PROCTOR_OLD_BASH="${PROCTOR_OLD_BASH:-false}"
+  export PROCTOR_BSD_UTIL="${PROCTOR_BSD_UTIL:-false}"
+  # If this detects we _aren't_ on MacOS then we'll default to assuming we don't
+  # need to bubble wrap an older bash. OotB, we'll support automatically bubble
+  # wrapping MacOS's old bash, or working with more recent bash. If you are on
+  # linux but DO have an older bash, you can set PROCTOR_OLD_BASH in the HOOK~
+  # See the HOOKIN_SOURCE section above for more info... The same applies to the
+  # BSD variety of coreutils that MacOS uses as opposed to GNU coreutils.
+else
+  vecho "Unsupported kernel! This supports Darwin or Linux. Not $KERNEL_NAME!"
+  return_code 127
+fi
+
+# At this stage, this is going to simply do this to make sure we bubblewrap Mac
+# users against their old bash and different options for bsd utils. It is only
+# a simple check, not an _exhaustive_ compatibility check, so you might be on a
+# system that passes the uname == Linux check, but that has an old bash, or a
+# different set of utils installed. We aren't going to exhaustively check a big
+# list of compatible OS or assume they would have default installs. This repo
+# will likely just track whatever the latest LTS release of Ubuntu provides as
+# its system bash to be the "not old version". At the moment if you are major
+# version 5, then everything should be fine.. but I'm not bothering to check
+# because smaller incremental difference will be handled, it's simply that Mac
+# uses an ___ancient___ version.
+
+# If you are on a machine that passes the simple check for uname == Linux, but
+# that is using an older bash or bsd utils, you can intentionally set them by
+# using the HOOK_SOURCE described above.
+
+vecho "DOTFILES SUPPORTED KERNEL :: $KERNEL_NAME_RELEASE"
+vecho "                   OS     :: $OS_NAME_VERSION"
+vecho "                   BASH   :: $BASH_VERSION"
+vecho "----- SYSTEM BASH VERSION INFO..."
+vprintf '#%.0s' {1..80} && vecho
+vecho "$(/bin/bash --version)"
+vprintf '#%.0s' {1..80} && vecho
+
+# Turn off debug if we didn't inherit the option.
+[[ "$INIT_X_OPT" == "off" ]] && set +x
