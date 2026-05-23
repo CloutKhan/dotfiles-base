@@ -36,6 +36,23 @@ It is a somewhat common (at least, not uncommon...) practice to include a whole,
 > So the bulk of this guide will be addressing the reason for this shift.
 >
 > It will not function as a generic guide to installing or using basic commands of git, like those other two guides do.
+### The method
+> [!TIP]
+> Every other section below this is a more thorough explanation for why this was necessary or how we justified this as the best middle of the road approach.
+> If all you want to know is what is the method we suggest without reading anything else unnecessarily, here's the top level description.
+
+<!-- this is being written while it's still theoretically WIP so keep that in mind... -->
+
+> [!IMPORTATION]
+> The method we use to maintain our `~/.gitconfig`:
+> 1. Write your settings as you would normally, but add them to `~/.gitconfig.base`
+> 1. Follow the inclusion instructions in:
+>     * [.include/.pre/.gitconfig](https://github.com/Skenvy/dotfiles/blob/main/.include/.pre/README.md#gitconfig) for OS specific configuration, like `autocrlf`, `filemode`, etc.
+>     * [.include/.post/.gitconfig](https://github.com/Skenvy/dotfiles/blob/main/.include/.post/README.md#gitconfig) for settings like your name, email, or gpg key ID
+> 1. Run one of the available "apply" scripts here that will bundle your inclusions together
+>     * [apply.sh](./apply.sh) for Linux/MacOS -- WIP.
+>     * PowerShell script is still WIP.
+
 ### _Reason_ for the unconvential method this guide suggests
 Historically, my personal push to adopt this method came about while figuring out how to adopt [devcontainers][.devcontainer/README.md], and stumbling on the clash between my _already existing_ use of `[includes]` in my _already-checked-in_ [`~/.gitconfig`][original ~/.gitconfig], clashing with the manner in which the [devcontainers automatic git integration][vsc devcontainers git] copies exclusively the one global file, and doesn't resolve the global state, thus dropping any `[include]`'d settings. Which is where I kept / keep my username and email, amongst other OS specific settings.
 
@@ -154,5 +171,7 @@ This might be due to circular includes.
 So to avoid _circular includes_, we need a separate temporary "`init`-only" `~/.gitconfig`.
 ##### Why overall?
 Even though there is depth to the reason for why each of these choices were made -- the end result, despite being more work, at least to understand, than the old approach -- actually ends up being a much smaller "new method" than would have seemed necessary initially. All we have to do is rename our existing config (no changes required to its contents, or downstream included paths..), add an init config file, and script some basic procedures (a file copy, run a command and capture its output, iterate the lines of that output and run a command for each).
+
+By keeping the settings in a native format we also get away with not needing to make any changes at all to the two inclusion READMEs, and we can script recreating our `~/.gitconfig` for multiple OS e.g. Ubuntu / Mac / Windows all use the same `git config ...` commands that will all read the same state, rather than shifting config state in to a script that would only work on any one of them.
 
 Admittedly I can't say for certain how well this would work performance wise if you had a very very large git config, but with a modest / small config, it should be negligible to do this on each shell start.

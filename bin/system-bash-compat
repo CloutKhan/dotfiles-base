@@ -87,7 +87,7 @@ fi
 # Start compat check
 
 vecho # Newline
-vecho "Starting $0..."
+vecho "Starting system bash compat check for callee $0..."
 vprintf '#%.0s' {1..80} && vecho
 export KERNEL_NAME="$(uname)" # default is "uname -s"
 export KERNEL_NAME_RELEASE="$(uname -sr)"
