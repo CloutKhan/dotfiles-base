@@ -37,12 +37,11 @@ It is a somewhat common (at least, not uncommon...) practice to include a whole,
 >
 > It will not function as a generic guide to installing or using basic commands of git, like those other two guides do.
 ### The method
+#### This is a TLDR
 > [!TIP]
 > Every other section below this is a more thorough explanation for why this was necessary or how we justified this as the best middle of the road approach.
 > If all you want to know is what is the method we suggest without reading anything else unnecessarily, here's the top level description.
-
-<!-- this is being written while it's still theoretically WIP so keep that in mind... -->
-
+#### What are the steps to follow the method
 > [!IMPORTATION]
 > The method we use to maintain our `~/.gitconfig`:
 > 1. Write your settings as you would normally, but add them to `~/.gitconfig.base`
@@ -54,7 +53,26 @@ It is a somewhat common (at least, not uncommon...) practice to include a whole,
 >     * [apply.sh](./apply.sh) for Linux/MacOS
 >     * [apply.ps1](./apply.ps1) for Windows
 > 1. If some config had been intermittently set in `~/.gitconfig` but not adopted by `~/.gitconfig.base` (or anything included by it), then these `apply.*` scripts will produce a `~/.gitconfig.diff` with the differing config captured. This is per run, so be sure to check it after each run if there was a difference!
-
+#### What are these steps doing under the hood?
+> [!NOTE]
+> What are these steps doing under the hood?
+> How are the `apply.*` scripts actually working?
+> You can find a much more thorough answer below in the [Current Implementation](#current-implementation) description.
+> But to summarise here:
+>
+> Each time you run a `./.git-config/apply.*`:
+> 1. The current state of `~/.gitconfig` is captured
+> 1. `~/.gitconfig.init` gets copied over the top of `~/.gitconfig`
+> 1. The new "init" state of `~/.gitconfig` is captured
+>     * This step hides a lot of magic baked in to this process...
+>     * `~/.gitconfig.init` `[includes]` `~/.gitconfig.base`
+>         * `~/.gitconfig.init` being the _temporary_ `~/.gitconfig`...
+>             * lets `~/.gitconfig.base` be our _actual_ `~/.gitconfig`
+> 1. `~/.gitconfig` is reset to empty.
+> 1. All of the "init" captured state is written to `~/.gitconfig`
+> 1. The previous state and the new state are compared.
+> 1. If there's a difference, it's written to a `~/.gitconfig.diff`
+>     * The diff just uses `diff` / `Compare-Object` so _might_ take effort to parse.
 ### _Reason_ for the unconvential method this guide suggests
 Historically, my personal push to adopt this method came about while figuring out how to adopt [devcontainers][.devcontainer/README.md], and stumbling on the clash between my _already existing_ use of `[includes]` in my _already-checked-in_ [`~/.gitconfig`][original ~/.gitconfig], clashing with the manner in which the [devcontainers automatic git integration][vsc devcontainers git] copies exclusively the one global file, and doesn't resolve the global state, thus dropping any `[include]`'d settings. Which is where I kept / keep my username and email, amongst other OS specific settings.
 
