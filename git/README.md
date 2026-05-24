@@ -16,6 +16,8 @@
 ## Dotfiles setup
 With `git` being frequently one of _the_ most important tools, its configuration can be one of the most important in your dotfiles.
 It is a somewhat common (at least, not uncommon...) practice to include a whole, or partial, global git config in a dotfiles repository.
+
+A global `.gitignore` and global `.gitattributes` can also be set and would be kept in your dotfiles repository, but we discuss those in the below sections and keep this "Dotfiles setup" section focused solely on our `.gitconfig` approach.
 > [!NOTE]
 > The method this dotfiles repository recommends for managing your `~/.gitconfig` is unconvential, and an exhaustive explanation for how and why this approach is recommended can be found in the [.gitconfig](./config/README.md) _specific_ README.
 >
@@ -49,14 +51,14 @@ See [git downloads](https://git-scm.com/downloads), it already has very helpful 
 * [Linux](https://git-scm.com/install/linux) (_probably_ just `apt install git` or `dnf install git`, or any other pkg manager..)
 * [_source_](https://git-scm.com/install/source) (if you choose this then you know what you're doing already)
 ## [`.gitignore`](https://git-scm.com/docs/gitignore)
-### Global
+### Global/Dotfiles
 > [!TIP]
 > Set your user global `.gitignore` with [`core.excludesFile`](https://git-scm.com/docs/git-config#Documentation/git-config.txt-coreexcludesFile).
 > Local settings will take precedence.
 >
 > In the context of `.gitignore`, local precedence means that a pattern you ignore globally can be unignored by a local `.gitignore`, so you can't blindly trust your global `.gitignore` will always prevent every commit of every pattern it ignores, universally.
 >
-> We use [~/.config/git/.gitattributes](../.config/git/.gitignore).
+> We use [~/.config/git/.gitignore](../.config/git/.gitignore).
 >
 > We use several [github/gitignore:./Global](https://github.com/github/gitignore/tree/main/Global);
 > OS ignores:
@@ -69,14 +71,15 @@ See [git downloads](https://git-scm.com/downloads), it already has very helpful 
 > `.ve/`, `.venv/`
 ### Local/Repo
 More often than not, you will best be served by having a look at some pre-existing ignore templates.
-
 Of course, you should edit these as necessary, and some tools / languages might be more or less likely to _have_ a template you can start from.
 
 Comprehensive community collections of templates exist, like [github/gitignore](https://github.com/github/gitignore).
+#### `-f` it
+We use a single `*` in the local ignore [here](../.gitignore), to ignore _everything_ (unless we `-f` it).
 
-Most popular languages or ecosystems have a template on there.
+You can make an exception to an ignore pattern for a specific file, by `-f`'ing it e.g. `git add -f <ignored-file>`.
 ## [`.gitattributes`](https://git-scm.com/docs/gitattributes)
-### Global
+### Global/Dotfiles
 > [!TIP]
 > Set your user global `.gitattributes` with [`core.attributesFile`](https://git-scm.com/docs/git-config#Documentation/git-config.txt-coreattributesFile).
 > Local settings will take precedence.
