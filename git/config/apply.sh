@@ -14,6 +14,9 @@
 # anyway! So changes made to this need to be tested on the home checkout, not
 # in a nested workspace checkout -- at least for final verification.
 
+# Save current shell options
+SAVED_OPTS=$(set +o)
+
 set -eu
 
 ################################################################################
@@ -70,3 +73,6 @@ if [ "$PRIOR_STATE" != "$TARGET_STATE" ]; then
 else
   echo "✅  Git config is in sync with managed configuration"
 fi
+
+# Restore original shell options
+eval "$SAVED_OPTS"

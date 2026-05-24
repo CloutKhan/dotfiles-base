@@ -14,6 +14,9 @@
 # anyway! So changes made to this need to be tested on the home checkout, not
 # in a nested workspace checkout -- at least for final verification.
 
+# Save current shell options
+$SAVED_ERROR_ACTION = $ErrorActionPreference
+
 $ErrorActionPreference = "Stop"
 
 ################################################################################
@@ -74,3 +77,6 @@ if ($PRIOR_STATE -ne $TARGET_STATE) {
 } else {
     Write-Host "✅  Git config is in sync with managed configuration"
 }
+
+# Restore original PowerShell preferences
+$ErrorActionPreference = $SAVED_ERROR_ACTION
