@@ -32,8 +32,8 @@ A global `.gitignore` and global `.gitattributes` can also be set and would be k
 >     * [.include/.pre/.gitconfig](https://github.com/Skenvy/dotfiles/blob/main/.include/.pre/README.md#gitconfig) for OS specific configuration, like `autocrlf`, `filemode`, etc.
 >     * [.include/.post/.gitconfig](https://github.com/Skenvy/dotfiles/blob/main/.include/.post/README.md#gitconfig) for settings like your name, email, or gpg key ID
 > 1. Run one of the available "apply" scripts here that will bundle your inclusions together
->     * [apply.sh](./apply.sh) for Linux/MacOS
->     * [apply.ps1](./apply.ps1) for Windows
+>     * [apply.sh](./config/apply.sh) for Linux/MacOS
+>     * [apply.ps1](./config/apply.ps1) for Windows
 > 1. If some config had been intermittently set in `~/.gitconfig` but not adopted by `~/.gitconfig.base` (or anything included by it), then these `apply.*` scripts will produce a `~/.gitconfig.diff` with the differing config captured. This is per run, so be sure to check it after each run if there was a difference!
 ## Be OS aware
 > [!CAUTION]
