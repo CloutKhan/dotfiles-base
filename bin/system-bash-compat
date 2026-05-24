@@ -1,10 +1,13 @@
 #!/bin/bash
 
+# Save current shell options
+SAVED_OPTS=$(set +o)
+
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 # https://www.gnu.org/software/bash/manual/html_node/The-Set-Builtin.html
-set -e # Exit on error code
-set -u # Exit on unset variable
-# set -x # Print trace # Only when debugging.
+set -e # Exit on error code # -o errexit
+set -u # Exit on unset variable # -o nounset
+# set -x # Print trace # Only when debugging. # -o xtrace
 set -o pipefail # Exit codes cascade through pipelines.
 
 # _THIS_ repository's scripts that utilise system bash shebangs (#!/bin/bash)
@@ -136,3 +139,6 @@ vprintf '#%.0s' {1..80} && vecho
 
 # Turn off debug if we didn't inherit the option.
 [[ "$INIT_X_OPT" == "off" ]] && set +x
+
+# Restore original shell options
+eval "$SAVED_OPTS"
