@@ -20,31 +20,9 @@
 # hand does not have a system bash that supports these. It's stuck on an ancient
 # version of bash (v3.2.*). We support this with in-situ swapsies. So just check
 # we're in an environment we expect to be compatible.
-echo # Newline
-echo "Starting $0..."
-printf '#%.0s' {1..80} && echo
-if [ "$(uname)" = "Darwin" ]; then
-  NAME_VERSION="$(sw_vers -productName) $(sw_vers -productVersion)"
-  PROCTOR_OLD_BASH=true
-  PROCTOR_BSD_UTIL=true
-elif [ "$(uname)" = "Linux" ]; then
-  NAME_VERSION="$( . /etc/os-release && echo "$NAME $VERSION" )"
-  PROCTOR_OLD_BASH=false
-  PROCTOR_BSD_UTIL=false
-  # If this detects we _aren't_ on MacOS then we'll default to assuming we don't
-  # need to bubble wrap an older bash. OotB, we'll support automatically bubble
-  # wrapping MacOS's old bash, or working with more recent bash. If you are on
-  # linux but DO have an older bash, you can set PROCTOR_OLD_BASH in the HOOK~
-  # See the DSS_HOOKIN_SOURCE section below for more... The same applies to the
-  # BSD variety of coreutils that MacOS uses as opposed to GNU coreutils.
-else
-  echo "Detected neither the darwin or the linux kernel. Stopping!"
-  exit 127
-fi
-echo "RUNNING IN THE $(uname -sr) KERNEL ($NAME_VERSION) -- SYSTEM BASH IS..."
-printf '#%.0s' {1..80} && echo
-echo "$(/bin/bash --version)"
-printf '#%.0s' {1..80} && echo
+source ./bin/system-bash-compat
+# If you need to configure either PROCTOR_OLD_BASH or PROCTOR_BSD_UTIL see the
+# compat script's hook description.
 ################################################################################
 # Now we've sorted out whether we can run or not... run...
 
@@ -59,12 +37,12 @@ esac
 "  
 }
 
-# DSS_HOOKIN_SOURCE defaults to .include/dotfiles-submodule-symlinks-hook.sh
+# DSS_HOOKIN_SOURCE defaults to .include/hooks/dotfiles-submodule-symlinks
 #     This is the PATH to a hook-in script that will be sourced if it exists.
 #     It provides a way to optionally source a script that can be used to add
 #     customisation in any of the provided ways, or any other way, if you know
 #     what you're doing. """Intended""" options are listed here;
-DSS_HOOKIN_SOURCE_DEFAULT=".include/dotfiles-submodule-symlinks-hook.sh"
+DSS_HOOKIN_SOURCE_DEFAULT=".include/hooks/dotfiles-submodule-symlinks"
 : "${DSS_HOOKIN_SOURCE:=$DSS_HOOKIN_SOURCE_DEFAULT}"
 # CLOBBER_CHECKEDIN_ROOT_IGNORELIST can be set as an array in the hook script,
 #     and will be added to the GLOBALLY_IGNORED_FILES to bypass these from the
@@ -72,14 +50,6 @@ DSS_HOOKIN_SOURCE_DEFAULT=".include/dotfiles-submodule-symlinks-hook.sh"
 #     except for explicitely approved clobbering files in this list. This is
 #     where you would list for example gpg config files, as they are core to
 #     this basic dotfiles setup, but are not themselves extendible / includable.
-# PROCTOR_BSD_UTIL can be set to "true" if you want to manually configure this
-#     to enact the same protections it has in place to ensure it operates OotB
-#     on MacOS (which uses BSD coreutils and not GNU...). Use this if you're on
-#     a BSD derivative.
-# PROCTOR_OLD_BASH can be set to "true" if you want to manually configure this
-#     to enact the same protections it has in place to ensure it operates OotB
-#     on MacOS (which has an ancient version of bash...). Use this if you're on
-#     Linux but stuck with an older system /bin/bash you can't upgrade.
 
 # CLOBBER_CHECKEDIN_ROOT defaults to ERROR
 #     ERROR means that if a file is checked in in both the root module and this
