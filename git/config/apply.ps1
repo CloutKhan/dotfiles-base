@@ -22,7 +22,7 @@ $THIS_SCRIPT_DIR = Split-Path -Parent $MyInvocation.MyCommand.Path
 # There is no powershell compat checking script (yet?)
 ################################################################################
 
-$GITCONFIG = Join-Path $THIS_SCRIPT_DIR "..\\.gitconfig"
+$GITCONFIG = Join-Path $THIS_SCRIPT_DIR "..\\..\\.gitconfig"
 $GITCONFIG_INIT = "$GITCONFIG.init"
 $GITCONFIG_BASE = "$GITCONFIG.base"
 $GITCONFIG_DIFF = "$GITCONFIG.diff"
