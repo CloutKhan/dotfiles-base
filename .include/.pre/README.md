@@ -28,7 +28,7 @@ LOCAL_WINDOWS_USERNAME=your-local-windows-user-name
 ```ini
 [core]
     autocrlf = true  # Checkout Windows-style, commit Unix-style
-    editor = <something like '\"C:\\Users\\<username>\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\code\" --wait' (without '')> 
+    editor = code --wait # ensure code is on your path
     filemode = false
     symlinks = false
 

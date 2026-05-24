@@ -46,7 +46,9 @@ It is a somewhat common (at least, not uncommon...) practice to include a whole,
 >     * [.include/.post/.gitconfig](https://github.com/Skenvy/dotfiles/blob/main/.include/.post/README.md#gitconfig) for settings like your name, email, or gpg key ID
 > 1. Run one of the available "apply" scripts here that will bundle your inclusions together
 >     * [apply.sh](./apply.sh) for Linux/MacOS
+>         * `./git/config/apply.sh`
 >     * [apply.ps1](./apply.ps1) for Windows
+>         * `powershell.exe -ExecutionPolicy Bypass -File ".\git\config\apply.ps1"`
 > 1. If some config had been intermittently set in `~/.gitconfig` but not adopted by `~/.gitconfig.base` (or anything included by it), then these `apply.*` scripts will produce a `~/.gitconfig.diff` with the differing config captured. This is per run, so be sure to check it after each run if there was a difference!
 #### What are these steps doing under the hood?
 > [!NOTE]

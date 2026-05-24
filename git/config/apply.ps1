@@ -50,7 +50,7 @@ Copy-Item $GITCONFIG_INIT $GITCONFIG -Force
 $TARGET_STATE = (Capture-GlobalStateSansIncludes | Sort-Object) -join "`n"
 
 # Step 4: Empty ~/.gitconfig to get a clean slate
-"" | Out-File $GITCONFIG
+Remove-Item $GITCONFIG # Windows is not happy if it's just an empty file.. so completely remove it
 
 # Step 5: Write the captured global state to ~/.gitconfig (the "base" state)
 # This establishes what the default configuration should be
@@ -58,6 +58,7 @@ $TARGET_STATE -split "`n" | ForEach-Object {
     if ($_ -match "^(.+?)=(.*)$") {
         $key = $matches[1]
         $value = $matches[2]
+        # If you are getting errors, it is highly likely from escape sequence shenanigans
         git config --file $GITCONFIG $key $value
     }
 }
