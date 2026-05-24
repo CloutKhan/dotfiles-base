@@ -46,15 +46,19 @@ This dotfile repository is setup in a way that it follows ["`$HOME` is a repo"](
 
 ## Pre-use
 > [!TIP]
-> You will only strictly _need_ `git`. But you should also setup `ssh` and `gpg`.
+> You will only strictly _need_ [`git`](./git/README.md). But you should also setup [`ssh`](./.ssh/README.md) and [`gpg`](./.gnupg/README.md).
 >
-> You don't _need_ to install `docker` but probably want to. These dotfiles support [devcontainers](./install.sh) as first-class.
+> You don't _need_ to install `docker` but probably want to. These dotfiles _aim to_ support [devcontainers](./install.sh) as first-class.
 >
 > You _should_ read and understand the use of the [`~/.include/*`](https://github.com/Skenvy/dotfiles/tree/main?tab=readme-ov-file#include) methodology.
 >
 > If you're submoduling this repository, you should understand the [script](./bin/dotfiles-submodule-symlinks) that supports this pattern.
+>
+> _Currently the submodule support script is only in bash, with a powershell equivalent to enable the same submoduling pattern on Windows as a TODO._
 ### [`git`](./git/README.md)
 To use any approach, you'll need to have `git` installed. See [git downloads](https://git-scm.com/downloads).
+
+To understand how this repository recommends managing your `~/.gitconfig`, read [.gitconfig](./git/config/README.md).
 ### [`ssh`](./.ssh/README.md)
 Unless you swap the `ssh` remote in these instructions with the `https` remote, you'll also need `ssh`.
 
