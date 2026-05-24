@@ -201,7 +201,7 @@ if ! shopt -oq posix; then
 fi
 
 ##### GIT+SSH+GPG
-source-existing-file ~/git/config/apply.sh
+( source-existing-file ~/git/config/apply.sh ) # subshell to wrap sets on start
 
 if [ -z "$SSH_AUTH_SOCK" ] ; then
     eval `ssh-agent -s` > /dev/null
