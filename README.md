@@ -53,7 +53,7 @@ This dotfile repository is setup in a way that it follows ["`$HOME` is a repo"](
 > You _should_ read and understand the use of the [`~/.include/*`](https://github.com/Skenvy/dotfiles/tree/main?tab=readme-ov-file#include) methodology.
 >
 > If you're submoduling this repository, you should understand the [script](./bin/dotfiles-submodule-symlinks) that supports this pattern.
-### `git`
+### [`git`](./git/README.md)
 To use any approach, you'll need to have `git` installed. See [git downloads](https://git-scm.com/downloads).
 ### [`ssh`](./.ssh/README.md)
 Unless you swap the `ssh` remote in these instructions with the `https` remote, you'll also need `ssh`.

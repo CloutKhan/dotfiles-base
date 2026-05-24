@@ -4,7 +4,7 @@
 [includeIfconditionpath]: https://git-scm.com/docs/git-config#Documentation/git-config.txt-includeIfconditionpath
 [vsc devcontainers git]: https://code.visualstudio.com/remote/advancedcontainers/sharing-git-credentials
 [reason]: #reason-for-the-unconvential-method-this-guide-suggests
-# [.gitconfig](https://github.com/Skenvy/dotfiles/blob/main/.git-config/README.md)
+# [.gitconfig](https://github.com/Skenvy/dotfiles/blob/main/git/config/README.md)
 > [!WARNING]
 > This guide explains a likely highly unconvential method for handling your `.gitconfig` files; by way of scripting their creation, rather than just checking in the actual `.gitconfig` itself.
 >
@@ -19,7 +19,7 @@
 > [!TIP]
 > Some settings will usually best be set to different choices depending on your OS.
 >
-> This should be a minimal way to set up git for use on Mac, Windows, and WSL.
+> This should be a minimal way to set up `~/.gitconfig` for use on Mac, Windows, and WSL.
 ---
 > [!IMPORTANT]
 > [`git`](https://git-scm.com/) can be configured via [`.gitconfig`](https://git-scm.com/docs/git-config) files, whether they are placed in repositories ("local" scope), or via the "global" config in `~/.gitconfig`.
@@ -30,12 +30,7 @@
 With `git` being frequently one of _the_ most important tools, its configuration can be one of the most important in your dotfiles.
 It is a somewhat common (at least, not uncommon...) practice to include a whole, or partial, global git config in a dotfiles repository.
 > [!NOTE]
-> This guide follows a different format to our [SSH](https://github.com/Skenvy/dotfiles/blob/main/.ssh/README.md) and [GPG](https://github.com/Skenvy/dotfiles/blob/main/.gnupg/README.md) guides:
->
-> Its primary intention is to explain why we shifted from one way of checking in a particular config, to another method.
-> So the bulk of this guide will be addressing the reason for this shift.
->
-> It will not function as a generic guide to installing or using basic commands of git, like those other two guides do.
+> This README serves as a sub-README to our general [`git`](../README.md) README, because this whole guide is dedicated solely to explaining our unconvential approach to managing our `~/.gitconfig`, that would otherwise take up the overwhelming majority of the general README.
 ### The method
 #### This is a TLDR
 > [!TIP]
@@ -60,7 +55,7 @@ It is a somewhat common (at least, not uncommon...) practice to include a whole,
 > You can find a much more thorough answer below in the [Current Implementation](#current-implementation) description.
 > But to summarise here:
 >
-> Each time you run a `./.git-config/apply.*`:
+> Each time you run a `./git/config/apply.*`:
 > 1. The current state of `~/.gitconfig` is captured
 > 1. `~/.gitconfig.init` gets copied over the top of `~/.gitconfig`
 > 1. The new "init" state of `~/.gitconfig` is captured

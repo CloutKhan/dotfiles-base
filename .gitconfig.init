@@ -1,9 +1,9 @@
 # https://git-scm.com/docs/git-config # For git's docs on config
 # To understand how this works and why we use "base/init/apply", read
-# https://github.com/Skenvy/dotfiles/blob/main/.git-config/README.md
+# https://github.com/Skenvy/dotfiles/blob/main/git/README.md
 # And see the two apply scripts that facilitate this;
-# https://github.com/Skenvy/dotfiles/blob/main/.git-config/apply.sh
-# https://github.com/Skenvy/dotfiles/blob/main/.git-config/apply.ps1
+# https://github.com/Skenvy/dotfiles/blob/main/git/config/apply.sh
+# https://github.com/Skenvy/dotfiles/blob/main/git/config/apply.ps1
 
 [include]
     path = ./.gitconfig.base
