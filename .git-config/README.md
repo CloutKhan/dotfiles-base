@@ -11,7 +11,7 @@
 > It would not be worthwhile following this guide unless you are intentionally seeking a method that allows you to;
 > 1. Use the regular `ini`-ish format of `.gitconfig`
 > 1. Use [`[include]`][includepath] or [`[includeIf]`][includeIfconditionpath] directives in your "global" `.gitconfig`
-> 1. Have the state of these **inclusion directives** resolved _"""externally"""_ to `git`
+> 1. Have the state of these **inclusion directives** resolved _asynchronously_ to typical `git` use.
 > 1. Use **inclusion directives**, but _avoid_ them being present in the "resolved" `.gitconfig`.
 >
 > You can see more about _why_ in the below "[_Reason_ for the unconvential method this guide suggests][reason]"
@@ -42,7 +42,7 @@ It is a somewhat common (at least, not uncommon...) practice to include a whole,
 > Every other section below this is a more thorough explanation for why this was necessary or how we justified this as the best middle of the road approach.
 > If all you want to know is what is the method we suggest without reading anything else unnecessarily, here's the top level description.
 #### What are the steps to follow the method
-> [!IMPORTATION]
+> [!IMPORTANT]
 > The method we use to maintain our `~/.gitconfig`:
 > 1. Write your settings as you would normally, but add them to `~/.gitconfig.base`
 > 1. Be aware of the presence of `~/.gitconfig.init`, but don't change it!
@@ -78,7 +78,12 @@ Historically, my personal push to adopt this method came about while figuring ou
 
 That is to say, I used `[include]` to prevent the check-in of OS settings / gpg settings / username / email, but when setting up devcontainers with the git integration for the first time, learnt that `[include]`'d settings don't propagate in to the container, because it simply copies the `~/.gitconfig` file without trying to follow `[include]`'d, or injecting a resolved state.
 
-Being able to support devcontainers in as generic a way as possible, and the use of git, ssh and gpg with them, is a goal of this repo.
+> [!TIP]
+> See the following two issues on [microsoft/vscode-remote-release](https://github.com/microsoft/vscode-remote-release) that track this:
+> 1. [#2084](https://github.com/microsoft/vscode-remote-release/issues/2084) ".gitconfig includeif not available inside container"
+> 1. [#3331](https://github.com/microsoft/vscode-remote-release/issues/3331) "include.path inside gitconfig Not Working"
+
+Being able to support devcontainers in as generic a way as possible, and the use of `git`, `ssh` and `gpg` with them, is a goal of this repo.
 
 Thus I needed to find a way to preserve my original intention of utilising `[include]`, but simultaneously avoid any `[include]` being required by `~/.gitconfig`, hence I needed to find the best method for maintaining my config _elsewhere_ (not in the `~/.gitconfig`), and periodically resolving the _state_ of my config and writing the config, in its resolved entirety, in to a "not checked in" `~/.gitconfig`.
 ### Finding the best new method
