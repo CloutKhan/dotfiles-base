@@ -201,7 +201,7 @@ if ! shopt -oq posix; then
 fi
 
 ##### GIT+SSH+GPG
-source-existing-file ~/.gitconfig/apply.sh
+source-existing-file ~/git/config/apply.sh
 
 if [ -z "$SSH_AUTH_SOCK" ] ; then
     eval `ssh-agent -s` > /dev/null
