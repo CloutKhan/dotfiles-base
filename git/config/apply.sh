@@ -19,10 +19,10 @@ set -eu
 ################################################################################
 # Our standard bash compat check
 THIS_SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-source $THIS_SCRIPT_DIR/../bin/system-bash-compat
+source $THIS_SCRIPT_DIR/../../bin/system-bash-compat
 ################################################################################
 
-GITCONFIG="$THIS_SCRIPT_DIR/../.gitconfig"
+GITCONFIG="$THIS_SCRIPT_DIR/../../.gitconfig"
 GITCONFIG_INIT="$GITCONFIG.init"
 GITCONFIG_BASE="$GITCONFIG.base" # Not used here, just decorative..
 GITCONFIG_DIFF="$GITCONFIG.diff"
