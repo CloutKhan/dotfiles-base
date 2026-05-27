@@ -1,4 +1,14 @@
-Invoke-Source "$HOME/.include/.pre/.pwsh_aliases" -Quiet
+Invoke-Source "$HOME/.include/.pre/.pwsh_aliases.ps1" -Quiet
+
+################################################################################
+# PowerShell aliases differ from bash aliases in several meaningful ways.
+# This might be called our "aliases" list, but most of the time, to achieve
+# similar targets to those we set in bash, we need to make our aliases as
+# functions, not with Set-Alias, which can't handle paths at invokation time.
+# We also have to attach "global:*" to each function name to explicitely set
+# their scope, because this whole script is loaded inside a function call that
+# otherwise takes ownership of the scope.
+# Hence, most aliases will be `function global:* { ... }` and not `Set-Alias`.
 
 ################################################################################
 # Aliases used to proctor updating this repo when it's added as a submodule..
@@ -13,11 +23,11 @@ Invoke-Source "$HOME/.include/.pre/.pwsh_aliases" -Quiet
 
 # For ensuring your ~/.gitconfig is up-to-date; per our unconvential method:
 # https://github.com/Skenvy/dotfiles/blob/main/git/config/README.md
-Set-Alias -Name gaconf -Value { & "$HOME/git/config/apply.ps1" }
+function global:gaconf { & "$HOME/git/config/apply.ps1" }
 
 ################################################################################
 # The above are some aliases relevant to using this repoistory as a submodule as
 # described by the README. For any additional aliases I use, I've added them
 # only in https://github.com/Skenvy/dotfiles/blob/home/.bash_aliases my home.
 
-Invoke-Source "$HOME/.include/.post/.pwsh_aliases" -Quiet
+Invoke-Source "$HOME/.include/.post/.pwsh_aliases.ps1" -Quiet
