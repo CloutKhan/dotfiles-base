@@ -106,15 +106,27 @@ echo "Looking for a $SYSTEM_BASH_COMPAT_BIN to run the guard..."
 # We needed to know the _SUBMOD path before calling system-bash-compat
 # Favour calling the copy in the submodule state
 if [ -f "$_SUBMOD/$SYSTEM_BASH_COMPAT_BIN" ]; then
+  echo "Found and running $_SUBMOD/$SYSTEM_BASH_COMPAT_BIN"
   source $_SUBMOD/$SYSTEM_BASH_COMPAT_BIN
 else
   # If it doesn't exist in the submodule state, try root repository.
+  echo "Missing submodule copy $_SUBMOD/$SYSTEM_BASH_COMPAT_BIN"
   if [ -f "$REPO_ROOT/$SYSTEM_BASH_COMPAT_BIN" ]; then
+    echo "Found and running $REPO_ROOT/$SYSTEM_BASH_COMPAT_BIN"
     source $REPO_ROOT/$SYSTEM_BASH_COMPAT_BIN
   else
-    # if it was in neither the submod or root, something went wrong
-    echo "Couldn't locate system-bash-compat, is your submodule up to date?"
-    exit 127
+    # If it was in neither the submod or root, something went wrong. As a final
+    # alternative, check if there is a system-bash-compat adjacent to this...
+    echo "Missing repository root copy $REPO_ROOT/$SYSTEM_BASH_COMPAT_BIN"
+    THIS_SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")" # but back out one..
+    if [ -f "$THIS_SCRIPT_DIR/../$SYSTEM_BASH_COMPAT_BIN" ]; then
+      echo "Found and running $THIS_SCRIPT_DIR/../$SYSTEM_BASH_COMPAT_BIN"
+      source $THIS_SCRIPT_DIR/../$SYSTEM_BASH_COMPAT_BIN
+    else
+      echo "Missing adjacent copy $THIS_SCRIPT_DIR/../$SYSTEM_BASH_COMPAT_BIN"
+      echo "Couldn't locate system-bash-compat, is your submodule up to date?"
+      exit 127
+    fi
   fi
 fi
 
