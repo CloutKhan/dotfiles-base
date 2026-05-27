@@ -158,3 +158,6 @@ if (Test-Path $PROFILE.CurrentUserAllHosts) {
     Write-Host "Success: Blank profile skeleton created." -ForegroundColor Green
 }
 ```
+### "ExecutionPolicy"
+[How does the RemoteSigned execution policy work?](https://devblogs.microsoft.com/powershell/how-does-the-remotesigned-execution-policy-work/) is an MS blog explaining `ExecutionPolicy`.
+[about_Execution_Policies :: 5.1](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-5.1) is more authoritative.
