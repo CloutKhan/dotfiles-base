@@ -110,3 +110,51 @@ rm -rf .git/ && cd ~ && git init && git remote add origin git@github.com:Skenvy/
 ```
 
 </details>
+
+## PowerShell equivalents for Windows
+The first step to introducing Windows equivalents here, is to understand `$PROFILE`, and that there are "two" modern states of PowerShell that would need to be be supported.
+
+[Version 5.1](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_profiles?view=powershell-5.1#the-profile-variable) is a legacy version that is installed by default on Windows, built on [.NET Framework](https://en.wikipedia.org/wiki/.NET_Framework).
+
+[Version 7.x](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_profiles?view=powershell-7.6#the-profile-variable) are the modern [FLOSS](https://github.com/powershell/powershell) (`MIT`) versions of PowerShell "Core" (monikered so because it is built on [.NET Core](https://en.wikipedia.org/wiki/.NET) (now just `.NET`)).
+
+You can install the `7.x`'s on non-Windows OS, [see here](https://learn.microsoft.com/en-us/powershell/scripting/install/install-powershell?view=powershell-7.6).
+
+Knowing which one to support takes knowing which one we are likely to have or use.
+All Windows get Version 5.1, and can optionally also install one or more `7.x`'s along-side the built-in `5.1`.
+
+What _we_ need to know for _this_, though, is that `5.1` and the `7.x`'s have slightly differen values for `$PROFILE`, although they both provide us with a built in way to retrieve those values locally via;
+```powershell
+<# Current User, Current Host - #> $PROFILE # Default == .CurrentUserCurrentHost
+<# Current User, Current Host - #> $PROFILE.CurrentUserCurrentHost
+<# Current User, All Hosts - #> $PROFILE.CurrentUserAllHosts
+<# All Users, Current Host - #> $PROFILE.AllUsersCurrentHost
+<# All Users, All Hosts - #> $PROFILE.AllUsersAllHosts
+```
+### What is "host"???
+"Host" is a bit of a poison pill in these descriptions.. "host" here means "each individual app", e.g., "PowerShell" and "PowerShell ISE" are two different applications, and, according to this, two different _Hosts_...
+```pwsh
+Write-Host $PROFILE.CurrentUserCurrentHost # In PowerShell
+# $HOME\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1
+Write-Host $PROFILE.CurrentUserCurrentHost # In PowerShell ISE
+# $HOME\Documents\WindowsPowerShell\Microsoft.PowerShellISE_profile.ps1
+```
+The lesson here is that, typically, your "host" here in PowerShell land doesn't mean your machine, and, rather unintuitively without being accustomed to it yet, your machine / user can have many "host" `$PROFILE`'s, one for each application you use that uses PowerShell, in fact.
+### `.bashrc` equivalent
+We don't want to bother with maintaining a whole bunch of "per app" configs for pwsh yet, and, thankfully, the `$PROFILE.CurrentUserAllHosts` choice is more closely aligned with being a `.bashrc` equivalent. So we can add a `$PROFILE.CurrentUserAllHosts` (which seems to be `$HOME\Documents\WindowsPowerShell\profile.ps1` in `5.1`) to house all our:
+* Path modifications: `$env:Path += ";C:\some\folder\path"`
+* Aliases: `Set-Alias`
+* Custom functions: `function someFunc { ... }`
+* Environment variables: `$env:SOME_ENV = 'SOME_VAL'`
+* Module loads: `Import-Module`
+* etc.
+
+We can create / evaluate whether we already have one with an easy check
+```pwsh
+if (Test-Path $PROFILE.CurrentUserAllHosts) {
+    Write-Warning "Profile already exists! Skipping creation to prevent overwriting your settings."
+} else {
+    New-Item -Path $PROFILE.CurrentUserAllHosts -ItemType File -Force
+    Write-Host "Success: Blank profile skeleton created." -ForegroundColor Green
+}
+```
