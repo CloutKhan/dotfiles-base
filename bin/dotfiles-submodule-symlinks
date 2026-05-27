@@ -20,7 +20,12 @@
 # hand does not have a system bash that supports these. It's stuck on an ancient
 # version of bash (v3.2.*). We support this with in-situ swapsies. So just check
 # we're in an environment we expect to be compatible.
-source ./bin/system-bash-compat
+
+# source ./bin/system-bash-compat # << typically how this would be called, but
+#     # << we need to handle this being intended for existing in a submodule.
+#     # << See lower down for how we make sure we find `system-bash-compat`.
+SYSTEM_BASH_COMPAT_BIN=bin/system-bash-compat
+
 # If you need to configure either PROCTOR_OLD_BASH or PROCTOR_BSD_UTIL see the
 # compat script's hook description.
 ################################################################################
@@ -96,6 +101,34 @@ REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null || pwd)
 _PWD="$(pwd)" # ~= "~"
 _SUBMOD="$_PWD/$SUBMOD_PATH" # ~= "~/dotfiles"
 _HOOK_SOURCE="$_PWD/$DSS_HOOKIN_SOURCE"
+
+echo "Looking for a $SYSTEM_BASH_COMPAT_BIN to run the guard..."
+# We needed to know the _SUBMOD path before calling system-bash-compat
+# Favour calling the copy in the submodule state
+if [ -f "$_SUBMOD/$SYSTEM_BASH_COMPAT_BIN" ]; then
+  echo "Found and running $_SUBMOD/$SYSTEM_BASH_COMPAT_BIN"
+  source $_SUBMOD/$SYSTEM_BASH_COMPAT_BIN
+else
+  # If it doesn't exist in the submodule state, try root repository.
+  echo "Missing submodule copy $_SUBMOD/$SYSTEM_BASH_COMPAT_BIN"
+  if [ -f "$REPO_ROOT/$SYSTEM_BASH_COMPAT_BIN" ]; then
+    echo "Found and running $REPO_ROOT/$SYSTEM_BASH_COMPAT_BIN"
+    source $REPO_ROOT/$SYSTEM_BASH_COMPAT_BIN
+  else
+    # If it was in neither the submod or root, something went wrong. As a final
+    # alternative, check if there is a system-bash-compat adjacent to this...
+    echo "Missing repository root copy $REPO_ROOT/$SYSTEM_BASH_COMPAT_BIN"
+    THIS_SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")" # but back out one..
+    if [ -f "$THIS_SCRIPT_DIR/../$SYSTEM_BASH_COMPAT_BIN" ]; then
+      echo "Found and running $THIS_SCRIPT_DIR/../$SYSTEM_BASH_COMPAT_BIN"
+      source $THIS_SCRIPT_DIR/../$SYSTEM_BASH_COMPAT_BIN
+    else
+      echo "Missing adjacent copy $THIS_SCRIPT_DIR/../$SYSTEM_BASH_COMPAT_BIN"
+      echo "Couldn't locate system-bash-compat, is your submodule up to date?"
+      exit 127
+    fi
+  fi
+fi
 
 echo # Newline
 echo "SUBMODULE PATH IS SET TO $SUBMOD_PATH"

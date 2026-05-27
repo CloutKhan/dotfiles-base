@@ -65,11 +65,11 @@ if [ "$PRIOR_STATE" != "$TARGET_STATE" ]; then
   set +e
   diff <(echo "$PRIOR_STATE") <(echo "$TARGET_STATE") >> "$GITCONFIG_DIFF"
   set -e
-  echo "⚠️  WARNING: Git config has diverged from the managed configuration!"
-  echo "⚠️  Differences saved to: $GITCONFIG_DIFF"
-  echo "⚠️  Please review and merge any necessary custom settings."
-  echo # Newline
-  cat "$GITCONFIG_DIFF"
+  echo "⚠️  WARNING: Git config has diverged from the managed configuration!" >&2
+  echo "⚠️  Differences saved to: $GITCONFIG_DIFF" >&2
+  echo "⚠️  Please review and merge any necessary custom settings." >&2
+  echo >&2 # Newline
+  cat "$GITCONFIG_DIFF" >&2
 else
   echo "✅  Git config is in sync with managed configuration"
 fi

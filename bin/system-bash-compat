@@ -25,11 +25,11 @@ set -o pipefail # Exit codes cascade through pipelines.
 VERBOSE="${VERBOSE:-true}"
 
 vecho() {
-  [[ "$VERBOSE" == "true" ]] && echo "$@"
+  [[ "$VERBOSE" == "true" ]] && echo "$@" || :
 }
 
 vprintf() {
-  [[ "$VERBOSE" == "true" ]] && printf "$@"
+  [[ "$VERBOSE" == "true" ]] && printf "$@" || :
 }
 
 # Enable debug mode by setting DEBUG=true
@@ -81,7 +81,7 @@ if [[ -f "$_HOOK_SOURCE" ]]; then
   source "$_HOOK_SOURCE"
 else
   vecho "Optional hook-in script '$_HOOK_SOURCE' does not exist, skipping."
-  if [[ "$HOOKIN_SOURCE" != "$HOOKIN_SOURCE" ]]; then
+  if [[ "$HOOKIN_SOURCE" != "$HOOKIN_SOURCE_DEFAULT" ]]; then
     vecho "Optional hook-in script was non-default yet didn't exist. Exiting."
     return_code 127
   fi

@@ -1,4 +1,4 @@
-source-existing-file ~/.include/.post/.bash_aliases
+source-existing-file ~/.include/.pre/.bash_aliases
 
 ################################################################################
 # Aliases used to proctor updating this repo when it's added as a submodule..
@@ -10,8 +10,12 @@ source-existing-file ~/.include/.post/.bash_aliases
 alias rehome="git submodule update --remote && git add dotfiles && CLOBBER_HOME=GRACEFULLY ~/dotfiles/bin/dotfiles-submodule-symlinks && git diff --cached dotfiles && git status"
 alias rehome_undo="git restore --staged dotfiles && git restore dotfiles && git submodule update && CLOBBER_HOME=GRACEFULLY ~/dotfiles/bin/dotfiles-submodule-symlinks && git status"
 
+# For ensuring your ~/.gitconfig is up-to-date; per our unconvential method:
+# https://github.com/Skenvy/dotfiles/blob/main/git/config/README.md
+alias gaconf="~/git/config/apply.sh"
+
 ################################################################################
-# The above are two aliases relevant to using this repoistory as a submodule as
+# The above are some aliases relevant to using this repoistory as a submodule as
 # described by the README. For any additional aliases I use, I've added them
 # only in https://github.com/Skenvy/dotfiles/blob/home/.bash_aliases my home.
 
