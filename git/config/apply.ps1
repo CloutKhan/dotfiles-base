@@ -70,13 +70,16 @@ if ($PRIOR_STATE -ne $TARGET_STATE) {
     $PRIOR_OBJ = $PRIOR_STATE -split "`n" | Sort-Object
     $TARGET_OBJ = $TARGET_STATE -split "`n" | Sort-Object
     Compare-Object $PRIOR_OBJ $TARGET_OBJ | Out-File $GITCONFIG_DIFF -Append
-    Write-Host "⚠️  WARNING: Git config has diverged from the managed configuration!"
-    Write-Host "⚠️  Differences saved to: $GITCONFIG_DIFF"
-    Write-Host "⚠️  Please review and merge any necessary custom settings."
+    [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+    $WARNSIGN = [char]::ConvertFromUtf32(0x26A0)
+    Write-Host "$WARNSIGN  WARNING: Git config has diverged from the managed configuration!"
+    Write-Host "$WARNSIGN  Differences saved to: $GITCONFIG_DIFF"
+    Write-Host "$WARNSIGN  Please review and merge any necessary custom settings."
     Write-Host ""
     Get-Content $GITCONFIG_DIFF
 } else {
-    Write-Host "✅  Git config is in sync with managed configuration"
+    $TICK = [char]::ConvertFromUtf32(0x2705)
+    Write-Host "$TICK  Git config is in sync with managed configuration"
 }
 
 # Restore original PowerShell preferences
