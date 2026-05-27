@@ -1,4 +1,4 @@
-source-existing-file ~/.include/.post/.bash_aliases
+source-existing-file ~/.include/.pre/.bash_aliases
 
 ################################################################################
 # Aliases used to proctor updating this repo when it's added as a submodule..
