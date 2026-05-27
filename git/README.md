@@ -52,14 +52,15 @@ See [git downloads](https://git-scm.com/downloads), it already has very helpful 
 * [_source_](https://git-scm.com/install/source) (if you choose this then you know what you're doing already)
 ## [`.gitignore`](https://git-scm.com/docs/gitignore)
 ### Global/Dotfiles
-> [!TIP]
-> Set your user global `.gitignore` with [`core.excludesFile`](https://git-scm.com/docs/git-config#Documentation/git-config.txt-coreexcludesFile).
+> [!IMPORTANT]
+> Set your user **global** `.gitignore` with [`core.excludesFile`](https://git-scm.com/docs/git-config#Documentation/git-config.txt-coreexcludesFile).
 > Local settings will take precedence.
 >
-> In the context of `.gitignore`, local precedence means that a pattern you ignore globally can be unignored by a local `.gitignore`, so you can't blindly trust your global `.gitignore` will always prevent every commit of every pattern it ignores, universally.
+> In the context of `.gitignore`, local precedence means that a pattern you ignore globally can be unignored by a local `.gitignore`, so you can't blindly trust your **global** `.gitignore` will always prevent every commit of every pattern it ignores, universally.
 >
 > We use [~/.config/git/.gitignore](../.config/git/.gitignore).
->
+
+> [!TIP]
 > We use several [github/gitignore:./Global](https://github.com/github/gitignore/tree/main/Global);
 > OS ignores:
 > [Linux](https://github.com/github/gitignore/blob/main/Global/Linux.gitignore),
@@ -69,6 +70,17 @@ See [git downloads](https://git-scm.com/downloads), it already has very helpful 
 > [Images](https://github.com/github/gitignore/blob/main/Global/Images.gitignore),
 > `node_modules/`,
 > `.ve/`, `.venv/`
+
+> [!NOTE]
+> `.gitignore` has no inclusion mechanism, and one isn't necessary either.
+>
+> As far as our **global** `.gitignore` is concerned, with regards to supporting _these_ dotfiles for use in devcontainers:
+> 1. Having the **global** `.gitignore` checked-in and...
+> 1. Referenced at a `$HOME`-relative location in our `~/.gitconfig.base` and...
+> 1. Pulled in to a devcontainer by a lifecycle step that supports installing from a dotfiles repository remote.
+>     * e.g. [vsc supports devcontainer dotfiles](https://code.visualstudio.com/docs/devcontainers/containers#_personalizing-with-dotfile-repositories)
+>
+> Is all we need to support our **global** `.gitignore` propagating in to a devcontainer build.
 ### Local/Repo
 More often than not, you will best be served by having a look at some pre-existing ignore templates.
 Of course, you should edit these as necessary, and some tools / languages might be more or less likely to _have_ a template you can start from.
@@ -80,13 +92,25 @@ We use a single `*` in the local ignore [here](../.gitignore), to ignore _everyt
 You can make an exception to an ignore pattern for a specific file, by `-f`'ing it e.g. `git add -f <ignored-file>`.
 ## [`.gitattributes`](https://git-scm.com/docs/gitattributes)
 ### Global/Dotfiles
-> [!TIP]
+> [!IMPORTANT]
 > Set your user global `.gitattributes` with [`core.attributesFile`](https://git-scm.com/docs/git-config#Documentation/git-config.txt-coreattributesFile).
 > Local settings will take precedence.
 >
 > We use [~/.config/git/.gitattributes](../.config/git/.gitattributes).
->
+
+> [!TIP]
 > The below suggestion for what `.gitattributes` to use locally are also good for global settings.
+
+> [!NOTE]
+> `.gitattributes` has no inclusion mechanism, and one isn't necessary either.
+>
+> As far as our **global** `.gitattributes` is concerned, with regards to supporting _these_ dotfiles for use in devcontainers:
+> 1. Having the **global** `.gitattributes` checked-in and...
+> 1. Referenced at a `$HOME`-relative location in our `~/.gitconfig.base` and...
+> 1. Pulled in to a devcontainer by a lifecycle step that supports installing from a dotfiles repository remote.
+>     * e.g. [vsc supports devcontainer dotfiles](https://code.visualstudio.com/docs/devcontainers/containers#_personalizing-with-dotfile-repositories)
+>
+> Is all we need to support our **global** `.gitattributes` propagating in to a devcontainer build.
 ### Local/Repo
 The following is what we both use [here](../.gitattributes), and what we generally recommend anyone use in their `.gitattributes`, if you don't already have a good reason for using some other attributes.
 
