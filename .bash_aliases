@@ -11,7 +11,8 @@ source-existing-file ~/.include/.post/.bash_aliases
 alias rehome="git submodule update --remote && git add dotfiles && CLOBBER_HOME=GRACEFULLY ~/dotfiles/bin/dotfiles-submodule-symlinks && git diff --cached dotfiles && git status"
 alias rehome_undo="git restore --staged dotfiles && git restore dotfiles && git submodule update && CLOBBER_HOME=GRACEFULLY ~/dotfiles/bin/dotfiles-submodule-symlinks && git status"
 
-# For ensuring your ~/.gitconfig is up-to-date
+# For ensuring your ~/.gitconfig is up-to-date; per our unconvential method:
+# https://github.com/Skenvy/dotfiles/blob/main/git/config/README.md
 alias gaconf="~/git/config/apply.sh"
 
 ################################################################################

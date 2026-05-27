@@ -102,3 +102,17 @@ See docs:
 > If you're adding these to your `.gitattributes` later in development, remember to `git add --renormalize .` to apply these setting to the indexed state.
 > Then add and commit the renormalised indexed state, so any new clone / pull will get a fully normalised state.
 > Any future changes will get normalised by this `.gitattributes` as they happen, now.
+## [`.gitmodules`](https://git-scm.com/docs/gitmodules)
+Purely for completeness of including the last of the `.git*` files, we'll also mention `.gitmodules` here, although only as an honourable mention.
+### Global/Dotfiles
+_There are none._ It's not a thing.. at all..
+### Local/Repo
+`.gitmodules` only applies to the context of being defined on a repository, and lists other repositories that you want to have copies of embedded in the repository submoduling.
+From `git`'s perspective, a submodule is tracked in the repository that lists it in its own `.gitmodules` as the sha-pin of the submoduled repository.
+See the entry in the git book, [7.11 Git Tools - Submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
+Fwiw, some people have strong opinions on the difference between [submodule](https://www.atlassian.com/git/tutorials/git-submodule) and [subtree](https://www.atlassian.com/git/tutorials/git-subtree). I don't necessarily take a side in this, but they are worth reading if you are still shopping around.
+### _This repo_
+Even though "`.gitmodules` has no dotfiles component" is true _for `.gitmodules` itself,_ **this** is a _dotfiles repository_, that **does** have a suggested use case for which it provides a `.gitmodules` example that can be used to submodule **this repository** in to any other dotfiles repository.
+
+The "base" branch, an example of a dotfiles repository piggybacking off this via our provided [Use as "$HOME is another repo"](https://github.com/Skenvy/dotfiles/tree/main?tab=readme-ov-file#use-as-home-is-another-repo) methodology, provides this [`.gitmodules`](https://github.com/Skenvy/dotfiles/blob/base/.gitmodules) example.
+More specific instructions can be found under [Use as "$HOME is another repo" :: Starting from an existing repository](https://github.com/Skenvy/dotfiles/tree/main?tab=readme-ov-file#starting-from-an-existing-repository).
